@@ -686,13 +686,22 @@
 
             <div class="header-actions">
                 <span class="save-status" id="saveStatus">All changes saved</span>
+                <a href="/admin.html" class="btn btn-secondary" title="Manage Articles">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Admin
+                </a>
                 <button class="btn btn-secondary" onclick="saveDraft()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
                         <polyline points="17 21 17 13 7 13 7 21"></polyline>
                         <polyline points="7 3 7 8 15 8"></polyline>
                     </svg>
-                    Save Draft
+                    Save
                 </button>
                 <button class="btn btn-primary" id="publishBtn" onclick="showPublishModal()">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -979,12 +988,152 @@
         </div>
     </div>
 
+    <!-- Link Modal -->
+    <div class="modal-overlay" id="linkModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Insert Link</h3>
+                <button onclick="closeModal('linkModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Link Text</label>
+                <input type="text" class="form-input" id="linkText" placeholder="Display text">
+            </div>
+            <div class="form-group">
+                <label class="form-label">URL</label>
+                <input type="text" class="form-input" id="linkUrl" placeholder="https://example.com">
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('linkModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertLink()">Insert Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Insert Image</h3>
+                <button onclick="closeModal('imageModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL</label>
+                <input type="text" class="form-input" id="imageUrl" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Alt Text (for accessibility)</label>
+                <input type="text" class="form-input" id="imageAlt" placeholder="Description of the image">
+            </div>
+            <div id="imagePreviewBox" style="margin-top: 12px; display: none; text-align: center;">
+                <img id="imagePreviewImg" src="" alt="" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('imageModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertImage()">Insert Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube Modal -->
+    <div class="modal-overlay" id="youtubeModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Embed YouTube Video</h3>
+                <button onclick="closeModal('youtubeModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">YouTube URL or Video ID</label>
+                <input type="text" class="form-input" id="youtubeVideoUrl"
+                    placeholder="https://youtube.com/watch?v=... or dQw4w9WgXcQ">
+            </div>
+            <div id="youtubePreviewBox" style="margin-top: 12px; display: none;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <iframe id="youtubePreviewFrame" src=""
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;"
+                        frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('youtubeModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertYouTube()">Embed Video</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Modal -->
+    <div class="modal-overlay" id="codeModal">
+        <div class="modal" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Insert Code Block</h3>
+                <button onclick="closeModal('codeModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Language (optional)</label>
+                <select class="form-select" id="codeLanguage">
+                    <option value="">Auto-detect</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="bash">Bash</option>
+                    <option value="json">JSON</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Code</label>
+                <textarea class="form-textarea" id="codeContent" rows="10" placeholder="Paste your code here..."
+                    style="font-family: 'JetBrains Mono', monospace; font-size: 13px;"></textarea>
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('codeModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertCode()">Insert Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GitHub Setup Modal -->
+    <div class="modal-overlay" id="githubModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Connect GitHub for Auto-Publish</h3>
+                <button onclick="closeModal('githubModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <p style="color: #6b7280; margin-bottom: 16px; font-size: 14px;">Articles will be automatically published to
+                your site when you save them to GitHub.</p>
+            <div class="form-group">
+                <label class="form-label">GitHub Personal Access Token</label>
+                <input type="password" class="form-input" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxx">
+                <small style="color: #6b7280; font-size: 12px;"><a
+                        href="https://github.com/settings/tokens/new?scopes=repo" target="_blank"
+                        style="color: #4f46e5;">Create token</a> with 'repo' scope</small>
+            </div>
+            <div class="form-group">
+                <label class="form-label">GitHub Username</label>
+                <input type="text" class="form-input" id="githubOwnerInput" placeholder="yourname">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Repository Name</label>
+                <input type="text" class="form-input" id="githubRepoInput" placeholder="Blooger">
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('githubModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveGitHubConfig()">Connect</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // Configuration
+        // Configuration - GitHub token is now stored securely on server
         const CONFIG = {
             password: 'blogi2026',
-            apiUrl: '/api/publish',
-            autoSaveInterval: 30000
+            autoSaveInterval: 30000,
+            publishApiUrl: '/api/publish'
         };
 
         // State
@@ -1122,39 +1271,100 @@
         }
 
         function insertLink() {
-            const url = prompt('Enter URL:');
+            document.getElementById('linkText').value = window.getSelection().toString();
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkModal').classList.add('active');
+        }
+
+        function confirmInsertLink() {
+            const text = document.getElementById('linkText').value || 'Link';
+            const url = document.getElementById('linkUrl').value;
             if (url) {
-                document.execCommand('createLink', false, url);
+                document.execCommand('insertHTML', false, `<a href="${url}" target="_blank">${text}</a>`);
+                closeModal('linkModal');
                 markDirty();
             }
         }
 
         function insertImage() {
-            const url = prompt('Enter image URL:');
+            document.getElementById('imageUrl').value = '';
+            document.getElementById('imageAlt').value = '';
+            document.getElementById('imagePreviewBox').style.display = 'none';
+            document.getElementById('imageModal').classList.add('active');
+
+            // Live preview
+            document.getElementById('imageUrl').oninput = function () {
+                const url = this.value;
+                if (url) {
+                    document.getElementById('imagePreviewImg').src = url;
+                    document.getElementById('imagePreviewBox').style.display = 'block';
+                } else {
+                    document.getElementById('imagePreviewBox').style.display = 'none';
+                }
+            };
+        }
+
+        function confirmInsertImage() {
+            const url = document.getElementById('imageUrl').value;
+            const alt = document.getElementById('imageAlt').value || 'Image';
             if (url) {
-                document.execCommand('insertImage', false, url);
+                document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt}" style="max-width: 100%; border-radius: 8px;">`);
+                closeModal('imageModal');
                 markDirty();
             }
         }
 
         function insertYouTube() {
-            const url = prompt('Enter YouTube URL or video ID:');
-            if (url) {
+            document.getElementById('youtubeVideoUrl').value = '';
+            document.getElementById('youtubePreviewBox').style.display = 'none';
+            document.getElementById('youtubeModal').classList.add('active');
+
+            // Live preview
+            document.getElementById('youtubeVideoUrl').oninput = function () {
+                const url = this.value;
                 const videoId = extractYouTubeId(url);
-                const html = `<div class="video-embed" contenteditable="false">
-          <iframe src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>
-        </div>`;
+                if (videoId) {
+                    document.getElementById('youtubePreviewFrame').src = `https://www.youtube.com/embed/${videoId}`;
+                    document.getElementById('youtubePreviewBox').style.display = 'block';
+                } else {
+                    document.getElementById('youtubePreviewBox').style.display = 'none';
+                }
+            };
+        }
+
+        function confirmInsertYouTube() {
+            const url = document.getElementById('youtubeVideoUrl').value;
+            const videoId = extractYouTubeId(url);
+            if (videoId) {
+                const html = `<div class="video-embed" contenteditable="false" style="position:relative;padding-bottom:56.25%;height:0;margin:16px 0;">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;" frameborder="0" allowfullscreen></iframe>
+                </div><p></p>`;
                 document.execCommand('insertHTML', false, html);
+                closeModal('youtubeModal');
                 markDirty();
             }
         }
 
         function insertCode() {
-            const code = prompt('Enter code:');
+            document.getElementById('codeLanguage').value = '';
+            document.getElementById('codeContent').value = '';
+            document.getElementById('codeModal').classList.add('active');
+        }
+
+        function confirmInsertCode() {
+            const lang = document.getElementById('codeLanguage').value;
+            const code = document.getElementById('codeContent').value;
             if (code) {
-                document.execCommand('insertHTML', false, `<pre><code>${escapeHtml(code)}</code></pre>`);
+                const escaped = escapeHtml(code);
+                const html = `<pre style="background:#1f2937;color:#e5e5e5;padding:16px;border-radius:8px;overflow-x:auto;margin:16px 0;"><code class="language-${lang}">${escaped}</code></pre><p></p>`;
+                document.execCommand('insertHTML', false, html);
+                closeModal('codeModal');
                 markDirty();
             }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
         }
 
         function extractYouTubeId(url) {
@@ -1396,6 +1606,14 @@
             document.getElementById('publishConfirm').style.display = 'block';
             document.getElementById('publishSuccess').style.display = 'none';
             document.getElementById('publishError').style.display = 'none';
+
+            // Always show GitHub publish button since credentials are hardcoded
+            document.querySelector('#publishConfirm .btn-primary').innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                Publish Now
+            `;
         }
 
         function closePublishModal() {
@@ -1432,33 +1650,46 @@
             // Generate markdown content
             const markdown = generateMarkdown(article);
 
-            // Download the markdown file
-            const blob = new Blob([markdown], { type: 'text/markdown' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `${article.slug}.md`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+            // Call secure API to publish
+            try {
+                const response = await fetch(CONFIG.publishApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        password: CONFIG.password,
+                        slug: article.slug,
+                        title: article.title,
+                        markdown: markdown
+                    })
+                });
 
-            // Show success
-            document.getElementById('publishConfirm').style.display = 'none';
-            document.getElementById('publishSuccess').style.display = 'block';
-            document.getElementById('articleUrl').innerHTML = `
-                <strong>File downloaded: ${article.slug}.md</strong><br><br>
-                <span style="font-size:13px;color:#6b7280;">
-                    To publish:<br>
-                    1. Add the file to <code>src/content/articles/</code><br>
-                    2. Run <code>npm run build</code><br>
-                    3. Deploy with <code>vercel --prod</code>
-                </span>
-            `;
-            document.getElementById('viewArticleBtn').style.display = 'none';
+                const result = await response.json();
 
-            // Clear draft
-            localStorage.removeItem('blogi_draft');
+                if (!response.ok) {
+                    throw new Error(result.error || 'Publishing failed');
+                }
+
+                // Success!
+                document.getElementById('publishConfirm').style.display = 'none';
+                document.getElementById('publishSuccess').style.display = 'block';
+                document.getElementById('articleUrl').innerHTML = `
+                    <strong>🎉 Published Successfully!</strong><br><br>
+                    <span style="font-size:13px;color:#6b7280;">
+                        Your article is being deployed.<br>
+                        It will be live in ~1-2 minutes.
+                    </span>
+                `;
+                document.getElementById('viewArticleBtn').href = `/articles/${article.slug}.html`;
+                document.getElementById('viewArticleBtn').style.display = 'inline-flex';
+
+                localStorage.removeItem('blogi_draft');
+
+            } catch (error) {
+                console.error('Publish error:', error);
+                document.getElementById('publishConfirm').style.display = 'none';
+                document.getElementById('publishError').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message;
+            }
         }
 
         function generateMarkdown(article) {
@@ -1505,7 +1736,7 @@ ${content}`;
                 .replace(/<img[^>]*src="([^"]*)"[^>]*\/?>/gi, '![]($1)')
                 .replace(/<br\s*\/?>/gi, '\n')
                 .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
-                .replace(/<pre><code>([\s\S]*?)<\/code><\/pre>/gi, '```\n$1\n```\n\n')
+                .replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, '```\n$1\n```\n\n')
                 .replace(/<code>(.*?)<\/code>/gi, '`$1`')
                 .replace(/<div[^>]*class="video-embed"[^>]*>[\s\S]*?src="https:\/\/www\.youtube\.com\/embed\/([^"]*)"[\s\S]*?<\/div>/gi, '\n{{youtube:$1}}\n')
                 .replace(/<[^>]+>/g, '')
@@ -1518,7 +1749,6 @@ ${content}`;
         }
 
         function showNotification(message) {
-            // Simple notification
             const notif = document.createElement('div');
             notif.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#10b981;color:white;padding:12px 24px;border-radius:8px;font-weight:500;z-index:9999;animation:slideIn 0.3s ease;';
             notif.textContent = message;

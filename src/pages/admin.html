@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin Dashboard | Blogi</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/png" href="/short log.png">
+
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #818cf8;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-900: #111827;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background: var(--gray-50);
+            min-height: 100vh;
+        }
+
+        /* Auth Screen */
+        .auth-screen {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+        }
+
+        .auth-screen.hidden {
+            display: none;
+        }
+
+        .auth-card {
+            background: white;
+            padding: 48px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .auth-card h2 {
+            margin: 16px 0 8px;
+        }
+
+        .auth-card p {
+            color: var(--gray-500);
+            margin-bottom: 24px;
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .auth-input {
+            padding: 12px 16px;
+            border: 2px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .auth-input:focus {
+            border-color: var(--primary);
+        }
+
+        .auth-btn {
+            padding: 12px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .auth-error {
+            color: var(--error);
+            font-size: 14px;
+            display: none;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+        }
+
+        .dashboard.active {
+            display: block;
+        }
+
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 32px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--gray-900);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .btn-danger {
+            background: var(--error);
+            color: white;
+        }
+
+        .btn-small {
+            padding: 6px 12px;
+            font-size: 13px;
+        }
+
+        /* Main Content */
+        .main {
+            padding: 24px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+        }
+
+        .stat-label {
+            font-size: 13px;
+            color: var(--gray-500);
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 4px;
+            background: var(--gray-100);
+            padding: 4px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .tab {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+
+        .tab.active {
+            background: white;
+            color: var(--gray-900);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Articles Table */
+        .articles-table {
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--gray-200);
+            overflow: hidden;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .table th {
+            background: var(--gray-50);
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: var(--gray-500);
+        }
+
+        .table tr:hover {
+            background: var(--gray-50);
+        }
+
+        .article-title {
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        .article-slug {
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .badge-published {
+            background: #d1fae5;
+            color: #059669;
+        }
+
+        .badge-draft {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .badge-scheduled {
+            background: #dbeafe;
+            color: #2563eb;
+        }
+
+        .badge-hidden {
+            background: var(--gray-200);
+            color: var(--gray-600);
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gray-100);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--gray-600);
+            transition: all 0.15s;
+        }
+
+        .action-btn:hover {
+            background: var(--gray-200);
+            color: var(--gray-900);
+        }
+
+        .action-btn.danger:hover {
+            background: #fee2e2;
+            color: var(--error);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: var(--gray-500);
+        }
+
+        .empty-state svg {
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--gray-500);
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 6px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+            margin-top: 24px;
+        }
+
+        /* Toggle Switch */
+        .toggle-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--gray-200);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle.active {
+            background: var(--success);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            top: 2px;
+            left: 2px;
+            transition: transform 0.2s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        /* Loading */
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 48px;
+        }
+
+        .spinner {
+            width: 32px;
+            height: 32px;
+            border: 3px solid var(--gray-200);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            padding: 12px 24px;
+            background: var(--gray-900);
+            color: white;
+            border-radius: 8px;
+            display: none;
+            z-index: 1001;
+        }
+
+        .toast.success {
+            background: var(--success);
+        }
+
+        .toast.error {
+            background: var(--error);
+        }
+
+        .toast.active {
+            display: block;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Auth Screen -->
+    <div class="auth-screen" id="authScreen">
+        <div class="auth-card">
+            <img src="/short log.png" alt="Blogi" height="48">
+            <h2>Admin Dashboard</h2>
+            <p>Enter credentials to manage articles</p>
+            <div class="auth-form">
+                <input type="text" class="auth-input" id="githubToken" placeholder="GitHub Personal Access Token">
+                <input type="text" class="auth-input" id="repoOwner" placeholder="GitHub Username (e.g., yourname)">
+                <input type="text" class="auth-input" id="repoName" placeholder="Repository Name (e.g., Blooger)">
+                <button class="auth-btn" onclick="authenticate()">Connect to GitHub</button>
+            </div>
+            <p class="auth-error" id="authError">Failed to connect. Check your credentials.</p>
+            <p style="margin-top: 16px; font-size: 12px; color: var(--gray-500);">
+                <a href="https://github.com/settings/tokens/new?scopes=repo" target="_blank"
+                    style="color: var(--primary);">Create a token</a> with 'repo' scope
+            </p>
+        </div>
+    </div>
+
+    <!-- Dashboard -->
+    <div class="dashboard" id="dashboard">
+        <header class="header">
+            <a href="/" class="logo">
+                <img src="/short log.png" alt="Blogi">
+                <span class="logo-text">BLOGI</span>
+                <span style="font-size: 12px; color: var(--gray-500); margin-left: 8px;">Admin</span>
+            </a>
+            <div class="header-actions">
+                <a href="/" class="btn btn-secondary">View Site</a>
+                <button class="btn btn-primary" onclick="openNewArticle()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                    New Article
+                </button>
+            </div>
+        </header>
+
+        <main class="main">
+            <!-- Stats -->
+            <div class="stats">
+                <div class="stat-card">
+                    <div class="stat-label">Total Articles</div>
+                    <div class="stat-value" id="totalArticles">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Published</div>
+                    <div class="stat-value" id="publishedArticles">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Drafts</div>
+                    <div class="stat-value" id="draftArticles">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-label">Scheduled</div>
+                    <div class="stat-value" id="scheduledArticles">0</div>
+                </div>
+            </div>
+
+            <!-- Tabs -->
+            <div class="tabs">
+                <button class="tab active" data-filter="all">All</button>
+                <button class="tab" data-filter="published">Published</button>
+                <button class="tab" data-filter="draft">Drafts</button>
+                <button class="tab" data-filter="scheduled">Scheduled</button>
+                <button class="tab" data-filter="hidden">Hidden</button>
+            </div>
+
+            <!-- Articles Table -->
+            <div class="articles-table">
+                <div class="loading" id="loadingState">
+                    <div class="spinner"></div>
+                </div>
+
+                <div class="empty-state" id="emptyState" style="display: none;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                    </svg>
+                    <p>No articles found</p>
+                    <button class="btn btn-primary" onclick="openNewArticle()" style="margin-top: 16px;">Create Your
+                        First Article</button>
+                </div>
+
+                <table class="table" id="articlesTable" style="display: none;">
+                    <thead>
+                        <tr>
+                            <th>Article</th>
+                            <th>Category</th>
+                            <th>Status</th>
+                            <th>Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="articlesBody"></tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Delete Article</h3>
+                <button class="modal-close" onclick="closeModal('deleteModal')">✕</button>
+            </div>
+            <p>Are you sure you want to delete "<span id="deleteArticleTitle"></span>"? This cannot be undone.</p>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('deleteModal')">Cancel</button>
+                <button class="btn btn-danger" id="confirmDeleteBtn">Delete</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Modal -->
+    <div class="modal-overlay" id="scheduleModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Schedule Article</h3>
+                <button class="modal-close" onclick="closeModal('scheduleModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Publish Date & Time</label>
+                <input type="datetime-local" class="form-input" id="scheduleDateTime">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('scheduleModal')">Cancel</button>
+                <button class="btn btn-primary" id="confirmScheduleBtn">Schedule</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal-overlay" id="settingsModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Article Settings</h3>
+                <button class="modal-close" onclick="closeModal('settingsModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <div class="toggle-wrapper">
+                    <div class="toggle" id="visibilityToggle" onclick="toggleVisibility()"></div>
+                    <span id="visibilityLabel">Visible</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Featured Score</label>
+                <input type="range" class="form-input" id="settingsFeaturedScore" min="0" max="100" value="50">
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-secondary" onclick="closeModal('settingsModal')">Cancel</button>
+                <button class="btn btn-primary" id="confirmSettingsBtn">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // State
+        let config = {
+            token: localStorage.getItem('github_token') || '',
+            owner: localStorage.getItem('github_owner') || '',
+            repo: localStorage.getItem('github_repo') || ''
+        };
+
+        let articles = [];
+        let currentFilter = 'all';
+        let currentArticle = null;
+
+        // Check auth on load
+        document.addEventListener('DOMContentLoaded', () => {
+            if (config.token && config.owner && config.repo) {
+                showDashboard();
+                loadArticles();
+            }
+
+            // Tab clicks
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    currentFilter = tab.dataset.filter;
+                    renderArticles();
+                });
+            });
+        });
+
+        // Auth
+        async function authenticate() {
+            const token = document.getElementById('githubToken').value.trim();
+            const owner = document.getElementById('repoOwner').value.trim();
+            const repo = document.getElementById('repoName').value.trim();
+
+            if (!token || !owner || !repo) {
+                document.getElementById('authError').style.display = 'block';
+                document.getElementById('authError').textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            try {
+                // Test connection
+                const response = await fetch(`https://api.github.com/repos/${owner}/${repo}`, {
+                    headers: { 'Authorization': `token ${token}` }
+                });
+
+                if (!response.ok) throw new Error('Invalid credentials');
+
+                config.token = token;
+                config.owner = owner;
+                config.repo = repo;
+
+                localStorage.setItem('github_token', token);
+                localStorage.setItem('github_owner', owner);
+                localStorage.setItem('github_repo', repo);
+
+                showDashboard();
+                loadArticles();
+
+            } catch (error) {
+                document.getElementById('authError').style.display = 'block';
+                document.getElementById('authError').textContent = error.message;
+            }
+        }
+
+        function showDashboard() {
+            document.getElementById('authScreen').classList.add('hidden');
+            document.getElementById('dashboard').classList.add('active');
+        }
+
+        // GitHub API
+        async function githubApi(endpoint, method = 'GET', data = null) {
+            const options = {
+                method,
+                headers: {
+                    'Authorization': `token ${config.token}`,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            };
+
+            if (data) {
+                options.headers['Content-Type'] = 'application/json';
+                options.body = JSON.stringify(data);
+            }
+
+            const response = await fetch(`https://api.github.com/repos/${config.owner}/${config.repo}${endpoint}`, options);
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(error.message);
+            }
+
+            return response.json();
+        }
+
+        // Load articles from GitHub
+        async function loadArticles() {
+            document.getElementById('loadingState').style.display = 'flex';
+            document.getElementById('articlesTable').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+
+            try {
+                const contents = await githubApi('/contents/src/content/articles');
+
+                articles = [];
+
+                for (const file of contents) {
+                    if (file.name.endsWith('.md')) {
+                        const fileData = await githubApi(`/contents/src/content/articles/${file.name}`);
+                        const content = atob(fileData.content);
+                        const parsed = parseMarkdown(content);
+
+                        articles.push({
+                            filename: file.name,
+                            sha: fileData.sha,
+                            path: file.path,
+                            ...parsed
+                        });
+                    }
+                }
+
+                updateStats();
+                renderArticles();
+
+            } catch (error) {
+                console.error('Load error:', error);
+                showToast('Failed to load articles: ' + error.message, 'error');
+            }
+
+            document.getElementById('loadingState').style.display = 'none';
+        }
+
+        function parseMarkdown(content) {
+            const frontmatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
+
+            if (!frontmatterMatch) {
+                return { title: 'Untitled', rawContent: content };
+            }
+
+            const metadata = {};
+            frontmatterMatch[1].split('\n').forEach(line => {
+                const match = line.match(/^(\w+):\s*(.*)$/);
+                if (match) {
+                    let value = match[2].trim();
+                    // Remove quotes
+                    if (value.startsWith('"') && value.endsWith('"')) {
+                        value = value.slice(1, -1);
+                    }
+                    metadata[match[1]] = value;
+                }
+            });
+
+            return {
+                ...metadata,
+                rawContent: frontmatterMatch[2],
+                fullContent: content
+            };
+        }
+
+        function updateStats() {
+            const now = new Date();
+
+            const total = articles.length;
+            const published = articles.filter(a => {
+                const pubDate = new Date(a.publish_date || a.publishDate);
+                return pubDate <= now && a.hidden !== 'true';
+            }).length;
+            const drafts = articles.filter(a => !a.publish_date && !a.publishDate).length;
+            const scheduled = articles.filter(a => {
+                const pubDate = new Date(a.publish_date || a.publishDate);
+                return pubDate > now;
+            }).length;
+
+            document.getElementById('totalArticles').textContent = total;
+            document.getElementById('publishedArticles').textContent = published;
+            document.getElementById('draftArticles').textContent = drafts;
+            document.getElementById('scheduledArticles').textContent = scheduled;
+        }
+
+        function renderArticles() {
+            const tbody = document.getElementById('articlesBody');
+            const now = new Date();
+
+            let filtered = articles;
+
+            if (currentFilter !== 'all') {
+                filtered = articles.filter(a => {
+                    const pubDate = new Date(a.publish_date || a.publishDate);
+                    const isHidden = a.hidden === 'true';
+
+                    switch (currentFilter) {
+                        case 'published':
+                            return pubDate <= now && !isHidden;
+                        case 'draft':
+                            return !a.publish_date && !a.publishDate;
+                        case 'scheduled':
+                            return pubDate > now;
+                        case 'hidden':
+                            return isHidden;
+                        default:
+                            return true;
+                    }
+                });
+            }
+
+            if (filtered.length === 0) {
+                document.getElementById('articlesTable').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                return;
+            }
+
+            document.getElementById('articlesTable').style.display = 'table';
+            document.getElementById('emptyState').style.display = 'none';
+
+            tbody.innerHTML = filtered.map(article => {
+                const pubDate = new Date(article.publish_date || article.publishDate);
+                const isHidden = article.hidden === 'true';
+                const isScheduled = pubDate > now;
+                const isDraft = !article.publish_date && !article.publishDate;
+
+                let badge = '';
+                if (isHidden) badge = '<span class="badge badge-hidden">Hidden</span>';
+                else if (isDraft) badge = '<span class="badge badge-draft">Draft</span>';
+                else if (isScheduled) badge = '<span class="badge badge-scheduled">Scheduled</span>';
+                else badge = '<span class="badge badge-published">Published</span>';
+
+                return `
+          <tr>
+            <td>
+              <div class="article-title">${article.title || 'Untitled'}</div>
+              <div class="article-slug">${article.slug || article.filename}</div>
+            </td>
+            <td>${article.category || '-'}</td>
+            <td>${badge}</td>
+            <td>${article.publish_date || article.publishDate || '-'}</td>
+            <td>
+              <div class="actions">
+                <button class="action-btn" onclick="editArticle('${article.filename}')" title="Edit">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                  </svg>
+                </button>
+                <button class="action-btn" onclick="openSchedule('${article.filename}')" title="Schedule">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <polyline points="12 6 12 12 16 14"></polyline>
+                  </svg>
+                </button>
+                <button class="action-btn" onclick="openSettings('${article.filename}')" title="Settings">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"></circle>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+                  </svg>
+                </button>
+                <button class="action-btn" onclick="viewArticle('${article.slug || article.filename.replace('.md', '')}')" title="View">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                    <circle cx="12" cy="12" r="3"></circle>
+                  </svg>
+                </button>
+                <button class="action-btn danger" onclick="openDelete('${article.filename}')" title="Delete">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="3 6 5 6 21 6"></polyline>
+                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+            }).join('');
+        }
+
+        // Actions
+        function openNewArticle() {
+            window.location.href = '/write.html';
+        }
+
+        function editArticle(filename) {
+            const article = articles.find(a => a.filename === filename);
+            if (article) {
+                localStorage.setItem('edit_article', JSON.stringify(article));
+                window.location.href = '/write.html?edit=' + encodeURIComponent(filename);
+            }
+        }
+
+        function viewArticle(slug) {
+            window.open(`/articles/${slug}.html`, '_blank');
+        }
+
+        // Delete
+        function openDelete(filename) {
+            currentArticle = articles.find(a => a.filename === filename);
+            document.getElementById('deleteArticleTitle').textContent = currentArticle.title;
+            document.getElementById('deleteModal').classList.add('active');
+
+            document.getElementById('confirmDeleteBtn').onclick = () => deleteArticle(filename);
+        }
+
+        async function deleteArticle(filename) {
+            const article = articles.find(a => a.filename === filename);
+
+            try {
+                await githubApi(`/contents/src/content/articles/${filename}`, 'DELETE', {
+                    message: `Delete article: ${article.title}`,
+                    sha: article.sha
+                });
+
+                showToast('Article deleted! Rebuilding site...', 'success');
+                closeModal('deleteModal');
+                await loadArticles();
+
+            } catch (error) {
+                showToast('Failed to delete: ' + error.message, 'error');
+            }
+        }
+
+        // Schedule
+        function openSchedule(filename) {
+            currentArticle = articles.find(a => a.filename === filename);
+            const date = currentArticle.publish_date || currentArticle.publishDate || new Date().toISOString().slice(0, 16);
+            document.getElementById('scheduleDateTime').value = date.slice(0, 16);
+            document.getElementById('scheduleModal').classList.add('active');
+
+            document.getElementById('confirmScheduleBtn').onclick = () => scheduleArticle(filename);
+        }
+
+        async function scheduleArticle(filename) {
+            const article = articles.find(a => a.filename === filename);
+            const newDate = document.getElementById('scheduleDateTime').value;
+
+            // Update frontmatter
+            let content = article.fullContent;
+            content = content.replace(/publish_date:\s*"[^"]*"/, `publish_date: "${newDate}"`);
+
+            try {
+                await githubApi(`/contents/src/content/articles/${filename}`, 'PUT', {
+                    message: `Schedule article: ${article.title} for ${newDate}`,
+                    content: btoa(unescape(encodeURIComponent(content))),
+                    sha: article.sha
+                });
+
+                showToast('Article scheduled! Rebuilding site...', 'success');
+                closeModal('scheduleModal');
+                await loadArticles();
+
+            } catch (error) {
+                showToast('Failed to schedule: ' + error.message, 'error');
+            }
+        }
+
+        // Settings
+        function openSettings(filename) {
+            currentArticle = articles.find(a => a.filename === filename);
+            const isHidden = currentArticle.hidden === 'true';
+            const score = currentArticle.featured_score || currentArticle.featuredScore || 50;
+
+            document.getElementById('visibilityToggle').classList.toggle('active', !isHidden);
+            document.getElementById('visibilityLabel').textContent = isHidden ? 'Hidden' : 'Visible';
+            document.getElementById('settingsFeaturedScore').value = score;
+            document.getElementById('settingsModal').classList.add('active');
+
+            document.getElementById('confirmSettingsBtn').onclick = () => saveSettings(filename);
+        }
+
+        function toggleVisibility() {
+            const toggle = document.getElementById('visibilityToggle');
+            toggle.classList.toggle('active');
+            document.getElementById('visibilityLabel').textContent = toggle.classList.contains('active') ? 'Visible' : 'Hidden';
+        }
+
+        async function saveSettings(filename) {
+            const article = articles.find(a => a.filename === filename);
+            const isVisible = document.getElementById('visibilityToggle').classList.contains('active');
+            const score = document.getElementById('settingsFeaturedScore').value;
+
+            let content = article.fullContent;
+
+            // Update hidden status
+            if (content.includes('hidden:')) {
+                content = content.replace(/hidden:\s*"[^"]*"/, `hidden: "${!isVisible}"`);
+            } else {
+                content = content.replace(/---\n/, `---\nhidden: "${!isVisible}"\n`);
+            }
+
+            // Update featured score
+            if (content.includes('featured_score:')) {
+                content = content.replace(/featured_score:\s*\d+/, `featured_score: ${score}`);
+            }
+
+            try {
+                await githubApi(`/contents/src/content/articles/${filename}`, 'PUT', {
+                    message: `Update settings: ${article.title}`,
+                    content: btoa(unescape(encodeURIComponent(content))),
+                    sha: article.sha
+                });
+
+                showToast('Settings saved! Rebuilding site...', 'success');
+                closeModal('settingsModal');
+                await loadArticles();
+
+            } catch (error) {
+                showToast('Failed to save: ' + error.message, 'error');
+            }
+        }
+
+        // Helpers
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.className = `toast ${type} active`;
+            setTimeout(() => toast.classList.remove('active'), 3000);
+        }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Blogi</title>
+    <link>https://blogi.com</link>
+    <description>All news about Blogs in one place</description>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 02 Jan 2026 23:33:52 GMT</lastBuildDate>
+    <atom:link href="https://blogi.com/rss.xml" rel="self" type="application/rss+xml"/>
+    <item>
+      <title><![CDATA[How to Process Movie Scripts Faster]]></title>
+      <link>https://blogi.com/articles/movie-script-processing.html</link>
+      <guid>https://blogi.com/articles/movie-script-processing.html</guid>
+      <pubDate>Sat, 03 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[A comprehensive guide to processing movie scripts efficiently with modern tools and proven techniques.]]></description>
+      <category>Movies</category>
+    </item>
+    <item>
+      <title><![CDATA[The Future of AI in Content Creation]]></title>
+      <link>https://blogi.com/articles/future-of-ai-content-creation.html</link>
+      <guid>https://blogi.com/articles/future-of-ai-content-creation.html</guid>
+      <pubDate>Fri, 02 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Exploring how artificial intelligence is revolutionizing the way we create and consume digital content in the modern era.]]></description>
+      <category>Technology</category>
+    </item>
+    <item>
+      <title><![CDATA[Scaling Your Business in 2026: A Complete Guide]]></title>
+      <link>https://blogi.com/articles/scaling-business-2026.html</link>
+      <guid>https://blogi.com/articles/scaling-business-2026.html</guid>
+      <pubDate>Thu, 01 Jan 2026 00:00:00 GMT</pubDate>
+      <description><![CDATA[Learn the proven strategies and frameworks that successful entrepreneurs use to scale their businesses effectively.]]></description>
+      <category>Business</category>
+    </item>
+    <item>
+      <title><![CDATA[Mindful Living in the Digital Age]]></title>
+      <link>https://blogi.com/articles/mindful-living-digital-age.html</link>
+      <guid>https://blogi.com/articles/mindful-living-digital-age.html</guid>
+      <pubDate>Tue, 30 Dec 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[Discover practical tips for maintaining balance and wellness while staying connected in our increasingly digital world.]]></description>
+      <category>Lifestyle</category>
+    </item>
+    <item>
+      <title><![CDATA[Health & Wellness Guide for 2026]]></title>
+      <link>https://blogi.com/articles/health-wellness-2026.html</link>
+      <guid>https://blogi.com/articles/health-wellness-2026.html</guid>
+      <pubDate>Thu, 25 Dec 2025 00:00:00 GMT</pubDate>
+      <description><![CDATA[Start the new year right with these essential health and wellness tips for a healthier, happier life.]]></description>
+      <category>Health</category>
+    </item>
+  </channel>
+</rss>

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="{{category_description}}">
+    <meta name="keywords" content="{{category}}, blog, articles, blogi">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://blogi.com/categories/{{category_slug}}.html">
+    <meta property="og:title" content="{{category}} Articles | Blogi">
+    <meta property="og:description" content="{{category_description}}">
+
+    <title>{{category}} Articles | Blogi</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/short log.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        body {
+            font-family: 'Inter', var(--font-system);
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <img src="/short log.png" alt="Blogi" height="40">
+                    <span class="logo-text">BLOGI</span>
+                </a>
+
+                <nav class="nav">
+                    <ul class="nav-links">
+                        <li><a href="/" class="nav-link">Home</a></li>
+                        <li><a href="/categories/technology.html"
+                                class="nav-link {{#if isTechnology}}active{{/if}}">Technology</a></li>
+                        <li><a href="/categories/business.html"
+                                class="nav-link {{#if isBusiness}}active{{/if}}">Business</a></li>
+                        <li><a href="/categories/lifestyle.html"
+                                class="nav-link {{#if isLifestyle}}active{{/if}}">Lifestyle</a></li>
+                        <li><a href="/categories/movies.html" class="nav-link {{#if isMovies}}active{{/if}}">Movies</a>
+                        </li>
+                    </ul>
+
+                    <div class="nav-actions">
+                        <a href="/#newsletter" class="btn btn-gradient">Subscribe</a>
+                    </div>
+
+                    <button class="mobile-menu-btn" aria-label="Toggle menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Category Header -->
+    <section class="category-header">
+        <div class="container">
+            <h1>{{category}}</h1>
+            <p class="category-description">{{category_description}}</p>
+        </div>
+    </section>
+
+    <!-- Category Articles -->
+    <section class="section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">All {{category}} Articles</h2>
+                <p class="section-subtitle">{{article_count}} articles in this category</p>
+            </div>
+
+            <div class="category-grid">
+                {{#each articles}}
+                <div class="blog-card">
+                    <div class="blog-card-image">
+                        <img src="{{this.thumbnail}}" alt="{{this.title}}" loading="lazy">
+                        <span class="blog-card-category">{{this.category}}</span>
+                    </div>
+                    <div class="blog-card-body">
+                        <h3 class="blog-card-title">
+                            <a href="/articles/{{this.slug}}.html">{{this.title}}</a>
+                        </h3>
+                        <p class="blog-card-excerpt">{{this.excerpt}}</p>
+                        <div class="blog-card-meta">
+                            <div class="blog-card-author">
+                                <img src="{{this.author_avatar}}" alt="{{this.author}}">
+                                <span>{{this.author}}</span>
+                            </div>
+                            <div class="blog-card-date">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                    stroke-width="2">
+                                    <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
+                                    <line x1="16" y1="2" x2="16" y2="6"></line>
+                                    <line x1="8" y1="2" x2="8" y2="6"></line>
+                                    <line x1="3" y1="10" x2="21" y2="10"></line>
+                                </svg>
+                                {{this.formatted_date}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {{/each}}
+            </div>
+
+            <!-- Pagination -->
+            <div class="pagination">
+                {{#if hasPrevPage}}
+                <a href="?page={{prevPage}}" class="pagination-item pagination-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                </a>
+                {{/if}}
+
+                {{#each pages}}
+                <a href="?page={{this}}" class="pagination-item {{#if isActive}}active{{/if}}">{{this}}</a>
+                {{/each}}
+
+                {{#if hasNextPage}}
+                <a href="?page={{nextPage}}" class="pagination-item pagination-arrow">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </a>
+                {{/if}}
+            </div>
+        </div>
+    </section>
+
+    <!-- SEO Text Block -->
+    <section class="section section-alt">
+        <div class="container container-narrow">
+            <h2 class="section-title text-center">About {{category}} Articles</h2>
+            <div
+                style="margin-top: var(--spacing-6); line-height: var(--line-height-relaxed); color: var(--color-gray-600);">
+                <p>{{category_seo_text}}</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter CTA -->
+    <section class="section">
+        <div class="container">
+            <div class="newsletter-cta">
+                <div class="newsletter-content">
+                    <h3>Stay updated on {{category}}</h3>
+                    <p>Subscribe to our newsletter and get the latest {{category}} articles delivered to your inbox.</p>
+                    <form class="newsletter-form" id="newsletterForm">
+                        <input type="email" placeholder="Enter your email address" required>
+                        <button type="submit">Subscribe</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <img src="/short log.png" alt="Blogi" height="32">
+                        <span class="logo-text">BLOGI</span>
+                    </a>
+                    <p>Your trusted source for insightful articles on technology, business, lifestyle, and more. Quality
+                        content delivered weekly.</p>
+                    <div class="footer-social">
+                        <a href="#" aria-label="Twitter">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="LinkedIn">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
+                                <rect x="2" y="9" width="4" height="12" />
+                                <circle cx="4" cy="4" r="2" />
+                            </svg>
+                        </a>
+                        <a href="#" aria-label="GitHub">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Categories</h4>
+                    <ul>
+                        <li><a href="/categories/technology.html">Technology</a></li>
+                        <li><a href="/categories/business.html">Business</a></li>
+                        <li><a href="/categories/lifestyle.html">Lifestyle</a></li>
+                        <li><a href="/categories/movies.html">Movies</a></li>
+                        <li><a href="/categories/health.html">Health</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Support</h4>
+                    <ul>
+                        <li><a href="#">Documentation</a></li>
+                        <li><a href="#">Tutorials</a></li>
+                        <li><a href="#">FAQs</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Legal</h4>
+                    <ul>
+                        <li><a href="#">Terms of Use</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-column">
+                    <h4>Company</h4>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2026 Blogi. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="/sitemap.xml">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Minimal JavaScript -->
+    <script>
+        // Mobile menu toggle
+        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
+        const navLinks = document.querySelector('.nav-links');
+
+        if (mobileMenuBtn) {
+            mobileMenuBtn.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+        }
+
+        // Newsletter form
+        const newsletterForm = document.getElementById('newsletterForm');
+        if (newsletterForm) {
+            newsletterForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = e.target.querySelector('input').value;
+                alert('Thank you for subscribing! You will receive updates at: ' + email);
+                e.target.reset();
+            });
+        }
+    </script>
+</body>
+
+</html>

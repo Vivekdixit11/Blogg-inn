@@ -1,0 +1,20 @@
+{
+  "name": "blogi",
+  "version": "1.0.0",
+  "description": "Blogi - Controlled Publishing Platform",
+  "main": "src/build/generate.js",
+  "scripts": {
+    "build": "node src/build/generate.js",
+    "dev": "npx http-server ./dist -p 3000 -o",
+    "serve": "npx http-server ./dist -p 3000"
+  },
+  "dependencies": {
+    "@vercel/blob": "^0.23.0"
+  },
+  "devDependencies": {
+    "http-server": "^14.1.1"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

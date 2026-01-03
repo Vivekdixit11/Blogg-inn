@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+
+    <title>Write | Blogi Admin</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        rel="stylesheet">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="/short log.png">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <style>
+        body {
+            font-family: 'Inter', var(--font-system);
+        }
+
+        .form-textarea.editor {
+            font-family: 'JetBrains Mono', monospace;
+        }
+    </style>
+</head>
+
+<body class="write-page">
+
+    <!-- Password Lock Screen -->
+    <div class="password-lock" id="passwordLock">
+        <div class="password-lock-card">
+            <div class="logo">
+                <img src="/short log.png" alt="Blogi" height="48">
+                <span class="logo-text">BLOGI</span>
+            </div>
+            <h2>Secure Write Access</h2>
+            <p style="color: var(--color-gray-600); margin-bottom: var(--spacing-6);">Enter the publish password to
+                access the editor.</p>
+
+            <div class="password-input-group">
+                <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off">
+                <button class="btn btn-primary" id="unlockBtn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                    </svg>
+                    Unlock
+                </button>
+            </div>
+
+            <p id="passwordError" style="color: var(--color-error); font-size: var(--font-size-sm); display: none;">
+                Invalid password. Please try again.
+            </p>
+            <p id="passwordAttempts"
+                style="color: var(--color-gray-500); font-size: var(--font-size-xs); margin-top: var(--spacing-4);">
+                Attempts remaining: <span id="attemptsCount">5</span>
+            </p>
+        </div>
+    </div>
+
+    <!-- Write Editor (Hidden until authenticated) -->
+    <div class="write-editor" id="writeEditor">
+        <div class="write-container">
+
+            <!-- Header -->
+            <div class="write-header">
+                <a href="/" class="logo">
+                    <img src="/short log.png" alt="Blogi" height="32">
+                    <span class="logo-text">BLOGI</span>
+                </a>
+
+                <div style="display: flex; align-items: center; gap: var(--spacing-4);">
+                    <span id="saveStatus" style="color: var(--color-gray-500); font-size: var(--font-size-sm);">Unsaved
+                        changes</span>
+                    <button class="btn btn-secondary" id="saveDraftBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                            <polyline points="7 3 7 8 15 8"></polyline>
+                        </svg>
+                        Save Draft
+                    </button>
+                    <button class="btn btn-gradient" id="publishBtn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                        Publish
+                    </button>
+                </div>
+            </div>
+
+            <!-- Editor Grid -->
+            <div class="write-grid">
+
+                <!-- Main Editor -->
+                <div class="write-main">
+
+                    <!-- Title -->
+                    <div class="write-card">
+                        <div class="form-group">
+                            <label class="form-label">Article Title</label>
+                            <input type="text" class="form-input" id="articleTitle"
+                                placeholder="Enter your article title..."
+                                style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">URL Slug</label>
+                            <div style="display: flex; align-items: center; gap: var(--spacing-2);">
+                                <span style="color: var(--color-gray-500);">/articles/</span>
+                                <input type="text" class="form-input" id="articleSlug" placeholder="auto-generated-slug"
+                                    style="flex: 1;">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Content Editor -->
+                    <div class="write-card">
+                        <div
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-4);">
+                            <h3 style="margin: 0; border: none; padding: 0;">Content</h3>
+                            <div class="preview-toggle" id="previewToggle">
+                                <button class="active" data-mode="edit">Edit</button>
+                                <button data-mode="preview">Preview</button>
+                            </div>
+                        </div>
+
+                        <div id="editorContainer">
+                            <textarea class="form-textarea editor" id="articleContent" placeholder="Write your article in Markdown...
+
+# Heading 1
+## Heading 2
+
+**Bold text** and *italic text*
+
+- Bullet point
+- Another point
+
+1. Numbered list
+2. Second item
+
+> Blockquote
+
+`inline code`
+
+```
+code block
+```
+
+[Link text](https://example.com)
+
+![Image alt text](image-url.jpg)
+
+To embed a YouTube video, use:
+{{youtube:VIDEO_ID}}
+
+"></textarea>
+                        </div>
+
+                        <div class="markdown-preview" id="previewContainer">
+                            <!-- Preview will be rendered here -->
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Sidebar -->
+                <div class="write-sidebar">
+
+                    <!-- Metadata -->
+                    <div class="write-card">
+                        <h3>Metadata</h3>
+
+                        <div class="form-group">
+                            <label class="form-label">Category</label>
+                            <select class="form-select" id="articleCategory">
+                                <option value="">Select category...</option>
+                                <option value="technology">Technology</option>
+                                <option value="business">Business</option>
+                                <option value="lifestyle">Lifestyle</option>
+                                <option value="movies">Movies</option>
+                                <option value="health">Health</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Author</label>
+                            <input type="text" class="form-input" id="articleAuthor" value="Editorial Team">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Tags (comma-separated)</label>
+                            <input type="text" class="form-input" id="articleTags" placeholder="tag1, tag2, tag3">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Publish Date</label>
+                            <input type="date" class="form-input" id="articleDate">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Excerpt</label>
+                            <textarea class="form-textarea" id="articleExcerpt" rows="3"
+                                placeholder="Brief description for cards and SEO..."></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Featured Score -->
+                    <div class="write-card">
+                        <h3>Featured Score</h3>
+                        <p
+                            style="font-size: var(--font-size-sm); color: var(--color-gray-500); margin-bottom: var(--spacing-4);">
+                            Higher scores appear in hero section</p>
+
+                        <input type="range" class="form-slider" id="featuredScore" min="0" max="100" value="50">
+                        <div class="slider-value">
+                            <span>0</span>
+                            <span id="featuredScoreValue">50</span>
+                            <span>100</span>
+                        </div>
+                    </div>
+
+                    <!-- Style Options -->
+                    <div class="write-card">
+                        <h3>Style Options</h3>
+
+                        <div class="form-group">
+                            <label class="form-label">Background Color</label>
+                            <div class="color-palette" id="bgColorPalette">
+                                <div class="color-option selected" data-color="white"
+                                    style="background: #ffffff; border: 1px solid #e5e7eb;" title="White"></div>
+                                <div class="color-option" data-color="gray" style="background: #f9fafb;" title="Gray">
+                                </div>
+                                <div class="color-option" data-color="cream" style="background: #fefce8;" title="Cream">
+                                </div>
+                                <div class="color-option" data-color="dark" style="background: #0f172a;" title="Dark">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Accent Color</label>
+                            <div class="color-palette" id="accentColorPalette">
+                                <div class="color-option selected" data-color="blue" style="background: #2563eb;"
+                                    title="Blue"></div>
+                                <div class="color-option" data-color="purple" style="background: #7c3aed;"
+                                    title="Purple"></div>
+                                <div class="color-option" data-color="green" style="background: #16a34a;" title="Green">
+                                </div>
+                                <div class="color-option" data-color="amber" style="background: #d97706;" title="Amber">
+                                </div>
+                                <div class="color-option" data-color="rose" style="background: #e11d48;" title="Rose">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Font Style</label>
+                            <select class="form-select" id="fontStyle">
+                                <option value="system">System (Default)</option>
+                                <option value="serif">Serif (Georgia)</option>
+                                <option value="mono">Monospace</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Media -->
+                    <div class="write-card">
+                        <h3>Featured Image</h3>
+
+                        <div class="form-group">
+                            <label class="form-label">Image URL</label>
+                            <input type="text" class="form-input" id="thumbnailUrl"
+                                placeholder="https://example.com/image.webp">
+                        </div>
+
+                        <div id="thumbnailPreview" style="display: none; margin-top: var(--spacing-4);">
+                            <img src="" alt="Thumbnail preview" style="width: 100%; border-radius: var(--radius-lg);">
+                        </div>
+                    </div>
+
+                    <!-- YouTube Video -->
+                    <div class="write-card">
+                        <h3>YouTube Video</h3>
+                        <p
+                            style="font-size: var(--font-size-sm); color: var(--color-gray-500); margin-bottom: var(--spacing-4);">
+                            Add a featured video to your article</p>
+
+                        <div class="form-group">
+                            <label class="form-label">YouTube URL or Video ID</label>
+                            <input type="text" class="form-input" id="youtubeUrl"
+                                placeholder="https://youtube.com/watch?v=...">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="/js/write.js"></script>
+</body>
+
+</html>

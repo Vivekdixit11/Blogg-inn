@@ -6,311 +6,1756 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="robots" content="noindex, nofollow">
 
-    <title>Write | Blogi Admin</title>
+    <title>Write | Blogi Editor</title>
 
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Georgia&display=swap"
         rel="stylesheet">
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="/short log.png">
 
-    <!-- Styles -->
-    <link rel="stylesheet" href="/css/main.css">
-
     <style>
-        body {
-            font-family: 'Inter', var(--font-system);
+        :root {
+            --color-primary: #4f46e5;
+            --color-primary-light: #818cf8;
+            --color-success: #10b981;
+            --color-warning: #f59e0b;
+            --color-error: #ef4444;
+            --color-gray-50: #f9fafb;
+            --color-gray-100: #f3f4f6;
+            --color-gray-200: #e5e7eb;
+            --color-gray-300: #d1d5db;
+            --color-gray-500: #6b7280;
+            --color-gray-600: #4b5563;
+            --color-gray-700: #374151;
+            --color-gray-900: #111827;
+            --font-system: system-ui, -apple-system, sans-serif;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
 
-        .form-textarea.editor {
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', var(--font-system);
+            background: var(--color-gray-50);
+            color: var(--color-gray-900);
+            min-height: 100vh;
+        }
+
+        /* Password Lock */
+        .password-lock {
+            position: fixed;
+            inset: 0;
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+        }
+
+        .password-lock.hidden {
+            display: none;
+        }
+
+        .password-card {
+            background: white;
+            padding: 48px;
+            border-radius: 24px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+
+        .password-card h2 {
+            margin: 24px 0 8px;
+            font-size: 24px;
+        }
+
+        .password-card p {
+            color: var(--color-gray-500);
+            margin-bottom: 24px;
+        }
+
+        .password-input-group {
+            display: flex;
+            gap: 12px;
+        }
+
+        .password-input-group input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .password-input-group input:focus {
+            border-color: var(--color-primary);
+        }
+
+        .password-input-group button {
+            padding: 12px 24px;
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .password-input-group button:hover {
+            background: var(--color-primary-light);
+        }
+
+        .error-msg {
+            color: var(--color-error);
+            font-size: 14px;
+            margin-top: 16px;
+            display: none;
+        }
+
+        /* Main Editor Layout */
+        .editor-app {
+            display: none;
+            height: 100vh;
+            flex-direction: column;
+        }
+
+        .editor-app.active {
+            display: flex;
+        }
+
+        /* Header */
+        .editor-header {
+            background: white;
+            border-bottom: 1px solid var(--color-gray-200);
+            padding: 12px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+
+        .logo img {
+            height: 32px;
+        }
+
+        .logo-text {
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--color-gray-900);
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .save-status {
+            font-size: 13px;
+            color: var(--color-gray-500);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s;
+        }
+
+        .btn-secondary {
+            background: var(--color-gray-100);
+            color: var(--color-gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--color-gray-200);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #4f46e5, #7c3aed);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Main Content */
+        .editor-main {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            overflow: hidden;
+        }
+
+        /* Content Editor Panel */
+        .editor-panel {
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            border-right: 1px solid var(--color-gray-200);
+        }
+
+        /* Toolbar */
+        .editor-toolbar {
+            background: white;
+            border-bottom: 1px solid var(--color-gray-200);
+            padding: 8px 16px;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-wrap: wrap;
+        }
+
+        .toolbar-group {
+            display: flex;
+            align-items: center;
+            gap: 2px;
+            padding-right: 8px;
+            border-right: 1px solid var(--color-gray-200);
+            margin-right: 8px;
+        }
+
+        .toolbar-group:last-child {
+            border: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .toolbar-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--color-gray-600);
+            transition: all 0.15s;
+        }
+
+        .toolbar-btn:hover {
+            background: var(--color-gray-100);
+            color: var(--color-gray-900);
+        }
+
+        .toolbar-btn.active {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .toolbar-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .toolbar-select {
+            padding: 6px 12px;
+            border: 1px solid var(--color-gray-200);
+            border-radius: 6px;
+            font-size: 13px;
+            background: white;
+            cursor: pointer;
+        }
+
+        /* Title Input */
+        .title-input {
+            border: none;
+            font-size: 32px;
+            font-weight: 700;
+            padding: 24px;
+            outline: none;
+            background: white;
+        }
+
+        .title-input::placeholder {
+            color: var(--color-gray-300);
+        }
+
+        /* Content Editable Area */
+        .content-editor {
+            flex: 1;
+            overflow-y: auto;
+            padding: 0 24px 24px;
+            background: white;
+        }
+
+        .content-editable {
+            min-height: 400px;
+            outline: none;
+            font-size: 17px;
+            line-height: 1.8;
+            color: var(--color-gray-700);
+        }
+
+        .content-editable:empty::before {
+            content: 'Start writing your article here...';
+            color: var(--color-gray-300);
+        }
+
+        .content-editable h1 {
+            font-size: 2em;
+            margin: 0.67em 0;
+        }
+
+        .content-editable h2 {
+            font-size: 1.5em;
+            margin: 0.75em 0;
+            color: var(--color-gray-900);
+        }
+
+        .content-editable h3 {
+            font-size: 1.17em;
+            margin: 0.83em 0;
+        }
+
+        .content-editable p {
+            margin: 1em 0;
+        }
+
+        .content-editable ul,
+        .content-editable ol {
+            margin: 1em 0;
+            padding-left: 2em;
+        }
+
+        .content-editable li {
+            margin: 0.5em 0;
+        }
+
+        .content-editable blockquote {
+            border-left: 4px solid var(--color-primary);
+            padding-left: 16px;
+            margin: 1em 0;
+            color: var(--color-gray-600);
+            font-style: italic;
+        }
+
+        .content-editable code {
+            background: var(--color-gray-100);
+            padding: 2px 6px;
+            border-radius: 4px;
             font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+        }
+
+        .content-editable pre {
+            background: var(--color-gray-900);
+            color: #e5e5e5;
+            padding: 16px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 1em 0;
+        }
+
+        .content-editable pre code {
+            background: none;
+            padding: 0;
+            color: inherit;
+        }
+
+        .content-editable img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin: 1em 0;
+        }
+
+        .content-editable a {
+            color: var(--color-primary);
+            text-decoration: underline;
+        }
+
+        /* Sidebar */
+        .editor-sidebar {
+            background: white;
+            overflow-y: auto;
+            padding: 24px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 24px;
+        }
+
+        .sidebar-section h3 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-gray-900);
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--color-gray-600);
+            margin-bottom: 6px;
+        }
+
+        .form-input,
+        .form-select,
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--color-gray-200);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--color-primary);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        /* Color Palette */
+        .color-palette {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-option {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.2s;
+        }
+
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+
+        .color-option.selected {
+            border-color: var(--color-primary);
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--color-primary);
+        }
+
+        /* Featured Score Slider */
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .slider-container input[type="range"] {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            background: var(--color-gray-200);
+            border-radius: 3px;
+        }
+
+        .slider-container input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--color-primary);
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            min-width: 32px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+
+        /* Live Preview Toggle */
+        .preview-toggle {
+            display: flex;
+            background: var(--color-gray-100);
+            border-radius: var(--radius-md);
+            padding: 4px;
+            margin-left: auto;
+        }
+
+        .preview-toggle button {
+            padding: 8px 16px;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--color-gray-600);
+            transition: all 0.2s;
+        }
+
+        .preview-toggle button.active {
+            background: white;
+            color: var(--color-gray-900);
+            box-shadow: var(--shadow-sm);
+        }
+
+        /* Live Preview Panel */
+        .preview-panel {
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--color-gray-100);
+        }
+
+        .preview-panel.active {
+            display: flex;
+        }
+
+        .preview-header {
+            background: white;
+            padding: 12px 16px;
+            border-bottom: 1px solid var(--color-gray-200);
+            font-weight: 600;
+            font-size: 14px;
+            color: var(--color-gray-600);
+        }
+
+        .preview-frame {
+            flex: 1;
+            border: none;
+            background: white;
+            margin: 16px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Publish Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 32px;
+            max-width: 480px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal h2 {
+            margin-bottom: 8px;
+        }
+
+        .modal p {
+            color: var(--color-gray-500);
+            margin-bottom: 24px;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+
+        /* Success Animation */
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--color-success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 16px;
+        }
+
+        .success-icon svg {
+            width: 32px;
+            height: 32px;
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .editor-main {
+                grid-template-columns: 1fr;
+            }
+
+            .editor-sidebar {
+                position: fixed;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: 320px;
+                transform: translateX(100%);
+                transition: transform 0.3s;
+                z-index: 100;
+                box-shadow: -4px 0 20px rgba(0, 0, 0, 0.1);
+            }
+
+            .editor-sidebar.open {
+                transform: translateX(0);
+            }
         }
     </style>
 </head>
 
-<body class="write-page">
-
-    <!-- Password Lock Screen -->
+<body>
+    <!-- Password Lock -->
     <div class="password-lock" id="passwordLock">
-        <div class="password-lock-card">
-            <div class="logo">
-                <img src="/short log.png" alt="Blogi" height="48">
-                <span class="logo-text">BLOGI</span>
-            </div>
-            <h2>Secure Write Access</h2>
-            <p style="color: var(--color-gray-600); margin-bottom: var(--spacing-6);">Enter the publish password to
-                access the editor.</p>
-
+        <div class="password-card">
+            <img src="/short log.png" alt="Blogi" height="48">
+            <h2>Secure Access</h2>
+            <p>Enter your publish password to continue</p>
             <div class="password-input-group">
-                <input type="password" id="passwordInput" placeholder="Enter password" autocomplete="off">
-                <button class="btn btn-primary" id="unlockBtn">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
-                        <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                    </svg>
-                    Unlock
-                </button>
+                <input type="password" id="passwordInput" placeholder="Password" autofocus>
+                <button onclick="unlock()">Unlock</button>
             </div>
-
-            <p id="passwordError" style="color: var(--color-error); font-size: var(--font-size-sm); display: none;">
-                Invalid password. Please try again.
-            </p>
-            <p id="passwordAttempts"
-                style="color: var(--color-gray-500); font-size: var(--font-size-xs); margin-top: var(--spacing-4);">
-                Attempts remaining: <span id="attemptsCount">5</span>
-            </p>
+            <p class="error-msg" id="errorMsg">Invalid password. Please try again.</p>
         </div>
     </div>
 
-    <!-- Write Editor (Hidden until authenticated) -->
-    <div class="write-editor" id="writeEditor">
-        <div class="write-container">
+    <!-- Editor App -->
+    <div class="editor-app" id="editorApp">
+        <!-- Header -->
+        <header class="editor-header">
+            <a href="/" class="logo">
+                <img src="/short log.png" alt="Blogi">
+                <span class="logo-text">BLOGI</span>
+            </a>
 
-            <!-- Header -->
-            <div class="write-header">
-                <a href="/" class="logo">
-                    <img src="/short log.png" alt="Blogi" height="32">
-                    <span class="logo-text">BLOGI</span>
+            <div class="preview-toggle" id="viewToggle">
+                <button class="active" data-view="edit">Edit</button>
+                <button data-view="split">Split</button>
+                <button data-view="preview">Preview</button>
+            </div>
+
+            <div class="header-actions">
+                <span class="save-status" id="saveStatus">All changes saved</span>
+                <a href="/admin.html" class="btn btn-secondary" title="Manage Articles">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Admin
                 </a>
+                <button class="btn btn-secondary" onclick="saveDraft()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                    Save
+                </button>
+                <button class="btn btn-primary" id="publishBtn" onclick="showPublishModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"></line>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                    </svg>
+                    Publish
+                </button>
+            </div>
+        </header>
 
-                <div style="display: flex; align-items: center; gap: var(--spacing-4);">
-                    <span id="saveStatus" style="color: var(--color-gray-500); font-size: var(--font-size-sm);">Unsaved
-                        changes</span>
-                    <button class="btn btn-secondary" id="saveDraftBtn">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                            stroke-width="2">
-                            <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
-                            <polyline points="17 21 17 13 7 13 7 21"></polyline>
-                            <polyline points="7 3 7 8 15 8"></polyline>
-                        </svg>
-                        Save Draft
-                    </button>
-                    <button class="btn btn-gradient" id="publishBtn">
+        <!-- Main Content -->
+        <div class="editor-main" id="editorMain">
+            <!-- Editor Panel -->
+            <div class="editor-panel" id="editorPanel">
+                <!-- Toolbar -->
+                <div class="editor-toolbar">
+                    <div class="toolbar-group">
+                        <select class="toolbar-select" onchange="formatBlock(this.value)">
+                            <option value="p">Paragraph</option>
+                            <option value="h1">Heading 1</option>
+                            <option value="h2">Heading 2</option>
+                            <option value="h3">Heading 3</option>
+                        </select>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" onclick="format('bold')" title="Bold (Ctrl+B)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                <path d="M6 4h8a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
+                                <path d="M6 12h9a4 4 0 0 1 4 4 4 4 0 0 1-4 4H6z"></path>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="format('italic')" title="Italic (Ctrl+I)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="19" y1="4" x2="10" y2="4"></line>
+                                <line x1="14" y1="20" x2="5" y2="20"></line>
+                                <line x1="15" y1="4" x2="9" y2="20"></line>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="format('underline')" title="Underline (Ctrl+U)">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M6 3v7a6 6 0 0 0 6 6 6 6 0 0 0 6-6V3"></path>
+                                <line x1="4" y1="21" x2="20" y2="21"></line>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="format('strikeThrough')" title="Strikethrough">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="4" y1="12" x2="20" y2="12"></line>
+                                <path d="M17.5 7.5c-.8-1.5-2.5-2.5-4.5-2.5-3.3 0-5 2-5 4 0 1.5.5 2.5 2 3"></path>
+                                <path d="M8.5 16.5c.8 1.5 2.5 2.5 4.5 2.5 3.3 0 5-2 5-4 0-1-.3-1.8-.8-2.5"></path>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" onclick="format('insertUnorderedList')" title="Bullet List">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="8" y1="6" x2="21" y2="6"></line>
+                                <line x1="8" y1="12" x2="21" y2="12"></line>
+                                <line x1="8" y1="18" x2="21" y2="18"></line>
+                                <circle cx="4" cy="6" r="1" fill="currentColor"></circle>
+                                <circle cx="4" cy="12" r="1" fill="currentColor"></circle>
+                                <circle cx="4" cy="18" r="1" fill="currentColor"></circle>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="format('insertOrderedList')" title="Numbered List">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <line x1="10" y1="6" x2="21" y2="6"></line>
+                                <line x1="10" y1="12" x2="21" y2="12"></line>
+                                <line x1="10" y1="18" x2="21" y2="18"></line>
+                                <text x="4" y="8" font-size="8" fill="currentColor">1</text>
+                                <text x="4" y="14" font-size="8" fill="currentColor">2</text>
+                                <text x="4" y="20" font-size="8" fill="currentColor">3</text>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="insertBlockquote()" title="Quote">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M3 21v-4.29c0-1.68.56-3.22 1.69-4.64S7.2 9.97 9 9.27V11c-1.32.64-2.33 1.42-3.03 2.36-.7.93-1.05 1.95-1.05 3.04h2.08c.55 0 1.02.2 1.41.59.39.39.59.86.59 1.41V21H3zm10 0v-4.29c0-1.68.57-3.22 1.7-4.64 1.13-1.42 2.5-2.37 4.3-2.8V11c-1.32.64-2.33 1.42-3.03 2.36-.7.93-1.05 1.95-1.05 3.04h2.08c.55 0 1.02.2 1.41.59.39.39.59.86.59 1.41V21h-6z" />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div class="toolbar-group">
+                        <button class="toolbar-btn" onclick="insertLink()" title="Insert Link">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="insertImage()" title="Insert Image">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+                                <circle cx="8.5" cy="8.5" r="1.5"></circle>
+                                <polyline points="21 15 16 10 5 21"></polyline>
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="insertYouTube()" title="Embed YouTube">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path
+                                    d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                            </svg>
+                        </button>
+                        <button class="toolbar-btn" onclick="insertCode()" title="Code Block">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="16 18 22 12 16 6"></polyline>
+                                <polyline points="8 6 2 12 8 18"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Title -->
+                <input type="text" class="title-input" id="articleTitle" placeholder="Enter your title here..."
+                    oninput="updatePreview()">
+
+                <!-- Content Editor -->
+                <div class="content-editor">
+                    <div class="content-editable" contenteditable="true" id="contentEditor" oninput="updatePreview()">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Live Preview Panel -->
+            <div class="preview-panel" id="previewPanel">
+                <div class="preview-header">📱 Live Preview</div>
+                <iframe class="preview-frame" id="previewFrame"></iframe>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="editor-sidebar" id="editorSidebar">
+                <div class="sidebar-section">
+                    <h3>Article Settings</h3>
+
+                    <div class="form-group">
+                        <label class="form-label">URL Slug</label>
+                        <input type="text" class="form-input" id="articleSlug" placeholder="auto-generated-from-title">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Category</label>
+                        <select class="form-select" id="articleCategory" onchange="updatePreview()">
+                            <option value="">Select category...</option>
+                            <option value="Technology">Technology</option>
+                            <option value="Business">Business</option>
+                            <option value="Lifestyle">Lifestyle</option>
+                            <option value="Movies">Movies</option>
+                            <option value="Health">Health</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Author</label>
+                        <input type="text" class="form-input" id="articleAuthor" value="Editorial Team">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Tags (comma-separated)</label>
+                        <input type="text" class="form-input" id="articleTags" placeholder="ai, technology, future">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Publish Date</label>
+                        <input type="date" class="form-input" id="articleDate">
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Excerpt (SEO Description)</label>
+                        <textarea class="form-textarea" id="articleExcerpt"
+                            placeholder="Brief description for search engines and cards..."></textarea>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Featured Score</h3>
+                    <p style="font-size: 12px; color: var(--color-gray-500); margin-bottom: 8px;">Higher scores appear
+                        in hero section</p>
+                    <div class="slider-container">
+                        <input type="range" id="featuredScore" min="0" max="100" value="50"
+                            oninput="document.getElementById('scoreValue').textContent = this.value">
+                        <span class="slider-value" id="scoreValue">50</span>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Styling</h3>
+
+                    <div class="form-group">
+                        <label class="form-label">Background Color</label>
+                        <div class="color-palette" id="bgPalette">
+                            <div class="color-option selected" data-color="white"
+                                style="background: #ffffff; border: 1px solid #e5e7eb;"></div>
+                            <div class="color-option" data-color="gray" style="background: #f9fafb;"></div>
+                            <div class="color-option" data-color="cream" style="background: #fefce8;"></div>
+                            <div class="color-option" data-color="dark" style="background: #0f172a;"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Accent Color</label>
+                        <div class="color-palette" id="accentPalette">
+                            <div class="color-option selected" data-color="blue" style="background: #2563eb;"></div>
+                            <div class="color-option" data-color="purple" style="background: #7c3aed;"></div>
+                            <div class="color-option" data-color="green" style="background: #16a34a;"></div>
+                            <div class="color-option" data-color="amber" style="background: #d97706;"></div>
+                            <div class="color-option" data-color="rose" style="background: #e11d48;"></div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Font Style</label>
+                        <select class="form-select" id="fontStyle" onchange="updatePreview()">
+                            <option value="system">System (Default)</option>
+                            <option value="serif">Serif (Georgia)</option>
+                            <option value="mono">Monospace</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>Featured Image</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="thumbnailUrl"
+                            placeholder="https://example.com/image.webp" oninput="updateThumbnailPreview()">
+                    </div>
+                    <div id="thumbnailPreview" style="margin-top: 8px; display: none;">
+                        <img src="" alt="Preview" style="width: 100%; border-radius: 8px;">
+                    </div>
+                </div>
+
+                <div class="sidebar-section">
+                    <h3>YouTube Video</h3>
+                    <div class="form-group">
+                        <input type="text" class="form-input" id="youtubeUrl"
+                            placeholder="https://youtube.com/watch?v=...">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Publish Modal -->
+    <div class="modal-overlay" id="publishModal">
+        <div class="modal" id="modalContent">
+            <div id="publishConfirm">
+                <h2>Ready to Publish?</h2>
+                <p>Your article will be live on the website immediately after publishing.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closePublishModal()">Cancel</button>
+                    <button class="btn btn-primary" onclick="publishArticle()">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
                             stroke-width="2">
                             <line x1="22" y1="2" x2="11" y2="13"></line>
                             <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
                         </svg>
-                        Publish
+                        Publish Now
                     </button>
                 </div>
             </div>
 
-            <!-- Editor Grid -->
-            <div class="write-grid">
-
-                <!-- Main Editor -->
-                <div class="write-main">
-
-                    <!-- Title -->
-                    <div class="write-card">
-                        <div class="form-group">
-                            <label class="form-label">Article Title</label>
-                            <input type="text" class="form-input" id="articleTitle"
-                                placeholder="Enter your article title..."
-                                style="font-size: var(--font-size-xl); font-weight: var(--font-weight-bold);">
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">URL Slug</label>
-                            <div style="display: flex; align-items: center; gap: var(--spacing-2);">
-                                <span style="color: var(--color-gray-500);">/articles/</span>
-                                <input type="text" class="form-input" id="articleSlug" placeholder="auto-generated-slug"
-                                    style="flex: 1;">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Content Editor -->
-                    <div class="write-card">
-                        <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: var(--spacing-4);">
-                            <h3 style="margin: 0; border: none; padding: 0;">Content</h3>
-                            <div class="preview-toggle" id="previewToggle">
-                                <button class="active" data-mode="edit">Edit</button>
-                                <button data-mode="preview">Preview</button>
-                            </div>
-                        </div>
-
-                        <div id="editorContainer">
-                            <textarea class="form-textarea editor" id="articleContent" placeholder="Write your article in Markdown...
-
-# Heading 1
-## Heading 2
-
-**Bold text** and *italic text*
-
-- Bullet point
-- Another point
-
-1. Numbered list
-2. Second item
-
-> Blockquote
-
-`inline code`
-
-```
-code block
-```
-
-[Link text](https://example.com)
-
-![Image alt text](image-url.jpg)
-
-To embed a YouTube video, use:
-{{youtube:VIDEO_ID}}
-
-"></textarea>
-                        </div>
-
-                        <div class="markdown-preview" id="previewContainer">
-                            <!-- Preview will be rendered here -->
-                        </div>
-                    </div>
-
+            <div id="publishSuccess" style="display: none;">
+                <div class="success-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
                 </div>
-
-                <!-- Sidebar -->
-                <div class="write-sidebar">
-
-                    <!-- Metadata -->
-                    <div class="write-card">
-                        <h3>Metadata</h3>
-
-                        <div class="form-group">
-                            <label class="form-label">Category</label>
-                            <select class="form-select" id="articleCategory">
-                                <option value="">Select category...</option>
-                                <option value="technology">Technology</option>
-                                <option value="business">Business</option>
-                                <option value="lifestyle">Lifestyle</option>
-                                <option value="movies">Movies</option>
-                                <option value="health">Health</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Author</label>
-                            <input type="text" class="form-input" id="articleAuthor" value="Editorial Team">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Tags (comma-separated)</label>
-                            <input type="text" class="form-input" id="articleTags" placeholder="tag1, tag2, tag3">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Publish Date</label>
-                            <input type="date" class="form-input" id="articleDate">
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Excerpt</label>
-                            <textarea class="form-textarea" id="articleExcerpt" rows="3"
-                                placeholder="Brief description for cards and SEO..."></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Featured Score -->
-                    <div class="write-card">
-                        <h3>Featured Score</h3>
-                        <p
-                            style="font-size: var(--font-size-sm); color: var(--color-gray-500); margin-bottom: var(--spacing-4);">
-                            Higher scores appear in hero section</p>
-
-                        <input type="range" class="form-slider" id="featuredScore" min="0" max="100" value="50">
-                        <div class="slider-value">
-                            <span>0</span>
-                            <span id="featuredScoreValue">50</span>
-                            <span>100</span>
-                        </div>
-                    </div>
-
-                    <!-- Style Options -->
-                    <div class="write-card">
-                        <h3>Style Options</h3>
-
-                        <div class="form-group">
-                            <label class="form-label">Background Color</label>
-                            <div class="color-palette" id="bgColorPalette">
-                                <div class="color-option selected" data-color="white"
-                                    style="background: #ffffff; border: 1px solid #e5e7eb;" title="White"></div>
-                                <div class="color-option" data-color="gray" style="background: #f9fafb;" title="Gray">
-                                </div>
-                                <div class="color-option" data-color="cream" style="background: #fefce8;" title="Cream">
-                                </div>
-                                <div class="color-option" data-color="dark" style="background: #0f172a;" title="Dark">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Accent Color</label>
-                            <div class="color-palette" id="accentColorPalette">
-                                <div class="color-option selected" data-color="blue" style="background: #2563eb;"
-                                    title="Blue"></div>
-                                <div class="color-option" data-color="purple" style="background: #7c3aed;"
-                                    title="Purple"></div>
-                                <div class="color-option" data-color="green" style="background: #16a34a;" title="Green">
-                                </div>
-                                <div class="color-option" data-color="amber" style="background: #d97706;" title="Amber">
-                                </div>
-                                <div class="color-option" data-color="rose" style="background: #e11d48;" title="Rose">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="form-group">
-                            <label class="form-label">Font Style</label>
-                            <select class="form-select" id="fontStyle">
-                                <option value="system">System (Default)</option>
-                                <option value="serif">Serif (Georgia)</option>
-                                <option value="mono">Monospace</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Media -->
-                    <div class="write-card">
-                        <h3>Featured Image</h3>
-
-                        <div class="form-group">
-                            <label class="form-label">Image URL</label>
-                            <input type="text" class="form-input" id="thumbnailUrl"
-                                placeholder="https://example.com/image.webp">
-                        </div>
-
-                        <div id="thumbnailPreview" style="display: none; margin-top: var(--spacing-4);">
-                            <img src="" alt="Thumbnail preview" style="width: 100%; border-radius: var(--radius-lg);">
-                        </div>
-                    </div>
-
-                    <!-- YouTube Video -->
-                    <div class="write-card">
-                        <h3>YouTube Video</h3>
-                        <p
-                            style="font-size: var(--font-size-sm); color: var(--color-gray-500); margin-bottom: var(--spacing-4);">
-                            Add a featured video to your article</p>
-
-                        <div class="form-group">
-                            <label class="form-label">YouTube URL or Video ID</label>
-                            <input type="text" class="form-input" id="youtubeUrl"
-                                placeholder="https://youtube.com/watch?v=...">
-                        </div>
-                    </div>
-
+                <h2>Published Successfully!</h2>
+                <p id="articleUrl">Your article is now live.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closePublishModal()">Close</button>
+                    <a id="viewArticleBtn" href="#" class="btn btn-primary" target="_blank">View Article</a>
                 </div>
             </div>
 
+            <div id="publishError" style="display: none;">
+                <h2>Publishing Failed</h2>
+                <p id="errorMessage">Something went wrong. Please try again.</p>
+                <div class="modal-actions">
+                    <button class="btn btn-secondary" onclick="closePublishModal()">Close</button>
+                    <button class="btn btn-primary" onclick="publishArticle()">Retry</button>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- JavaScript -->
-    <script src="/js/write.js"></script>
+    <!-- Link Modal -->
+    <div class="modal-overlay" id="linkModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Insert Link</h3>
+                <button onclick="closeModal('linkModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Link Text</label>
+                <input type="text" class="form-input" id="linkText" placeholder="Display text">
+            </div>
+            <div class="form-group">
+                <label class="form-label">URL</label>
+                <input type="text" class="form-input" id="linkUrl" placeholder="https://example.com">
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('linkModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertLink()">Insert Link</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div class="modal-overlay" id="imageModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Insert Image</h3>
+                <button onclick="closeModal('imageModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Image URL</label>
+                <input type="text" class="form-input" id="imageUrl" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Alt Text (for accessibility)</label>
+                <input type="text" class="form-input" id="imageAlt" placeholder="Description of the image">
+            </div>
+            <div id="imagePreviewBox" style="margin-top: 12px; display: none; text-align: center;">
+                <img id="imagePreviewImg" src="" alt="" style="max-width: 100%; max-height: 200px; border-radius: 8px;">
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('imageModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertImage()">Insert Image</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- YouTube Modal -->
+    <div class="modal-overlay" id="youtubeModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Embed YouTube Video</h3>
+                <button onclick="closeModal('youtubeModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">YouTube URL or Video ID</label>
+                <input type="text" class="form-input" id="youtubeVideoUrl"
+                    placeholder="https://youtube.com/watch?v=... or dQw4w9WgXcQ">
+            </div>
+            <div id="youtubePreviewBox" style="margin-top: 12px; display: none;">
+                <div style="position: relative; padding-bottom: 56.25%; height: 0;">
+                    <iframe id="youtubePreviewFrame" src=""
+                        style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border-radius: 8px;"
+                        frameborder="0"></iframe>
+                </div>
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('youtubeModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertYouTube()">Embed Video</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Code Modal -->
+    <div class="modal-overlay" id="codeModal">
+        <div class="modal" style="max-width: 600px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Insert Code Block</h3>
+                <button onclick="closeModal('codeModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Language (optional)</label>
+                <select class="form-select" id="codeLanguage">
+                    <option value="">Auto-detect</option>
+                    <option value="javascript">JavaScript</option>
+                    <option value="python">Python</option>
+                    <option value="html">HTML</option>
+                    <option value="css">CSS</option>
+                    <option value="bash">Bash</option>
+                    <option value="json">JSON</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Code</label>
+                <textarea class="form-textarea" id="codeContent" rows="10" placeholder="Paste your code here..."
+                    style="font-family: 'JetBrains Mono', monospace; font-size: 13px;"></textarea>
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('codeModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="confirmInsertCode()">Insert Code</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GitHub Setup Modal -->
+    <div class="modal-overlay" id="githubModal">
+        <div class="modal">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h3 style="margin: 0;">Connect GitHub for Auto-Publish</h3>
+                <button onclick="closeModal('githubModal')"
+                    style="background: none; border: none; cursor: pointer; font-size: 20px; color: #6b7280;">✕</button>
+            </div>
+            <p style="color: #6b7280; margin-bottom: 16px; font-size: 14px;">Articles will be automatically published to
+                your site when you save them to GitHub.</p>
+            <div class="form-group">
+                <label class="form-label">GitHub Personal Access Token</label>
+                <input type="password" class="form-input" id="githubTokenInput" placeholder="ghp_xxxxxxxxxxxx">
+                <small style="color: #6b7280; font-size: 12px;"><a
+                        href="https://github.com/settings/tokens/new?scopes=repo" target="_blank"
+                        style="color: #4f46e5;">Create token</a> with 'repo' scope</small>
+            </div>
+            <div class="form-group">
+                <label class="form-label">GitHub Username</label>
+                <input type="text" class="form-input" id="githubOwnerInput" placeholder="yourname">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Repository Name</label>
+                <input type="text" class="form-input" id="githubRepoInput" placeholder="Blooger">
+            </div>
+            <div class="modal-actions" style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 16px;">
+                <button class="btn btn-secondary" onclick="closeModal('githubModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveGitHubConfig()">Connect</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration - GitHub token is now stored securely on server
+        const CONFIG = {
+            password: 'blogi2026',
+            autoSaveInterval: 30000,
+            publishApiUrl: '/api/publish'
+        };
+
+        // State
+        let state = {
+            bgColor: 'white',
+            accentColor: 'blue',
+            isDirty: false,
+            lastSaved: null
+        };
+
+        // Password unlock
+        function unlock() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === CONFIG.password) {
+                document.getElementById('passwordLock').classList.add('hidden');
+                document.getElementById('editorApp').classList.add('active');
+                loadDraft();
+                initEditor();
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+
+        // Check session
+        if (sessionStorage.getItem('blogi_auth')) {
+            document.getElementById('passwordLock').classList.add('hidden');
+            document.getElementById('editorApp').classList.add('active');
+            setTimeout(() => {
+                loadDraft();
+                initEditor();
+            }, 100);
+        }
+
+        document.getElementById('passwordInput').addEventListener('keypress', e => {
+            if (e.key === 'Enter') unlock();
+        });
+
+        // Initialize editor
+        function initEditor() {
+            sessionStorage.setItem('blogi_auth', 'true');
+
+            // Set today's date
+            document.getElementById('articleDate').value = new Date().toISOString().split('T')[0];
+
+            // Color palette clicks
+            setupColorPalette('bgPalette', 'bgColor');
+            setupColorPalette('accentPalette', 'accentColor');
+
+            // View toggle
+            document.getElementById('viewToggle').addEventListener('click', e => {
+                if (e.target.tagName === 'BUTTON') {
+                    const view = e.target.dataset.view;
+                    document.querySelectorAll('#viewToggle button').forEach(b => b.classList.remove('active'));
+                    e.target.classList.add('active');
+
+                    const editorPanel = document.getElementById('editorPanel');
+                    const previewPanel = document.getElementById('previewPanel');
+                    const sidebar = document.getElementById('editorSidebar');
+
+                    if (view === 'edit') {
+                        editorPanel.style.display = 'flex';
+                        previewPanel.classList.remove('active');
+                        document.getElementById('editorMain').style.gridTemplateColumns = '1fr 400px';
+                    } else if (view === 'preview') {
+                        editorPanel.style.display = 'none';
+                        previewPanel.classList.add('active');
+                        document.getElementById('editorMain').style.gridTemplateColumns = '1fr 400px';
+                        updatePreview();
+                    } else if (view === 'split') {
+                        editorPanel.style.display = 'flex';
+                        previewPanel.classList.add('active');
+                        document.getElementById('editorMain').style.gridTemplateColumns = '1fr 1fr 400px';
+                        updatePreview();
+                    }
+                }
+            });
+
+            // Auto-generate slug from title
+            document.getElementById('articleTitle').addEventListener('input', e => {
+                const slug = e.target.value
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/[\s_-]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+                document.getElementById('articleSlug').value = slug;
+                markDirty();
+            });
+
+            // Auto-save
+            setInterval(autoSave, CONFIG.autoSaveInterval);
+
+            // Keyboard shortcuts
+            document.addEventListener('keydown', e => {
+                if (e.ctrlKey || e.metaKey) {
+                    switch (e.key) {
+                        case 'b': e.preventDefault(); format('bold'); break;
+                        case 'i': e.preventDefault(); format('italic'); break;
+                        case 'u': e.preventDefault(); format('underline'); break;
+                        case 's': e.preventDefault(); saveDraft(); break;
+                    }
+                }
+            });
+        }
+
+        function setupColorPalette(paletteId, stateKey) {
+            const palette = document.getElementById(paletteId);
+            palette.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', () => {
+                    palette.querySelectorAll('.color-option').forEach(o => o.classList.remove('selected'));
+                    option.classList.add('selected');
+                    state[stateKey] = option.dataset.color;
+                    updatePreview();
+                    markDirty();
+                });
+            });
+        }
+
+        // Formatting commands
+        function format(command) {
+            document.execCommand(command, false, null);
+            markDirty();
+        }
+
+        function formatBlock(tag) {
+            document.execCommand('formatBlock', false, `<${tag}>`);
+            markDirty();
+        }
+
+        function insertBlockquote() {
+            document.execCommand('formatBlock', false, '<blockquote>');
+            markDirty();
+        }
+
+        function insertLink() {
+            document.getElementById('linkText').value = window.getSelection().toString();
+            document.getElementById('linkUrl').value = '';
+            document.getElementById('linkModal').classList.add('active');
+        }
+
+        function confirmInsertLink() {
+            const text = document.getElementById('linkText').value || 'Link';
+            const url = document.getElementById('linkUrl').value;
+            if (url) {
+                document.execCommand('insertHTML', false, `<a href="${url}" target="_blank">${text}</a>`);
+                closeModal('linkModal');
+                markDirty();
+            }
+        }
+
+        function insertImage() {
+            document.getElementById('imageUrl').value = '';
+            document.getElementById('imageAlt').value = '';
+            document.getElementById('imagePreviewBox').style.display = 'none';
+            document.getElementById('imageModal').classList.add('active');
+
+            // Live preview
+            document.getElementById('imageUrl').oninput = function () {
+                const url = this.value;
+                if (url) {
+                    document.getElementById('imagePreviewImg').src = url;
+                    document.getElementById('imagePreviewBox').style.display = 'block';
+                } else {
+                    document.getElementById('imagePreviewBox').style.display = 'none';
+                }
+            };
+        }
+
+        function confirmInsertImage() {
+            const url = document.getElementById('imageUrl').value;
+            const alt = document.getElementById('imageAlt').value || 'Image';
+            if (url) {
+                document.execCommand('insertHTML', false, `<img src="${url}" alt="${alt}" style="max-width: 100%; border-radius: 8px;">`);
+                closeModal('imageModal');
+                markDirty();
+            }
+        }
+
+        function insertYouTube() {
+            document.getElementById('youtubeVideoUrl').value = '';
+            document.getElementById('youtubePreviewBox').style.display = 'none';
+            document.getElementById('youtubeModal').classList.add('active');
+
+            // Live preview
+            document.getElementById('youtubeVideoUrl').oninput = function () {
+                const url = this.value;
+                const videoId = extractYouTubeId(url);
+                if (videoId) {
+                    document.getElementById('youtubePreviewFrame').src = `https://www.youtube.com/embed/${videoId}`;
+                    document.getElementById('youtubePreviewBox').style.display = 'block';
+                } else {
+                    document.getElementById('youtubePreviewBox').style.display = 'none';
+                }
+            };
+        }
+
+        function confirmInsertYouTube() {
+            const url = document.getElementById('youtubeVideoUrl').value;
+            const videoId = extractYouTubeId(url);
+            if (videoId) {
+                const html = `<div class="video-embed" contenteditable="false" style="position:relative;padding-bottom:56.25%;height:0;margin:16px 0;">
+                    <iframe src="https://www.youtube.com/embed/${videoId}" style="position:absolute;top:0;left:0;width:100%;height:100%;border-radius:8px;" frameborder="0" allowfullscreen></iframe>
+                </div><p></p>`;
+                document.execCommand('insertHTML', false, html);
+                closeModal('youtubeModal');
+                markDirty();
+            }
+        }
+
+        function insertCode() {
+            document.getElementById('codeLanguage').value = '';
+            document.getElementById('codeContent').value = '';
+            document.getElementById('codeModal').classList.add('active');
+        }
+
+        function confirmInsertCode() {
+            const lang = document.getElementById('codeLanguage').value;
+            const code = document.getElementById('codeContent').value;
+            if (code) {
+                const escaped = escapeHtml(code);
+                const html = `<pre style="background:#1f2937;color:#e5e5e5;padding:16px;border-radius:8px;overflow-x:auto;margin:16px 0;"><code class="language-${lang}">${escaped}</code></pre><p></p>`;
+                document.execCommand('insertHTML', false, html);
+                closeModal('codeModal');
+                markDirty();
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function extractYouTubeId(url) {
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\s]+)/,
+                /^([a-zA-Z0-9_-]{11})$/
+            ];
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return url;
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        }
+
+        // Update live preview
+        function updatePreview() {
+            const previewFrame = document.getElementById('previewFrame');
+            const title = document.getElementById('articleTitle').value || 'Untitled Article';
+            const content = document.getElementById('contentEditor').innerHTML;
+            const category = document.getElementById('articleCategory').value || 'General';
+            const author = document.getElementById('articleAuthor').value || 'Editorial Team';
+            const date = document.getElementById('articleDate').value;
+            const fontStyle = document.getElementById('fontStyle').value;
+            const thumbnail = document.getElementById('thumbnailUrl').value;
+
+            const bgColors = { white: '#fff', gray: '#f9fafb', cream: '#fefce8', dark: '#0f172a' };
+            const accentColors = { blue: '#2563eb', purple: '#7c3aed', green: '#16a34a', amber: '#d97706', rose: '#e11d48' };
+            const fonts = { system: 'system-ui, sans-serif', serif: 'Georgia, serif', mono: 'monospace' };
+
+            const bgColor = bgColors[state.bgColor];
+            const accentColor = accentColors[state.accentColor];
+            const font = fonts[fontStyle];
+            const textColor = state.bgColor === 'dark' ? '#e5e5e5' : '#111827';
+
+            const html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Georgia&display=swap" rel="stylesheet">
+          <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body {
+              font-family: ${font};
+              background: ${bgColor};
+              color: ${textColor};
+              line-height: 1.8;
+              padding: 24px;
+            }
+            .category {
+              display: inline-block;
+              background: ${accentColor};
+              color: white;
+              padding: 4px 12px;
+              border-radius: 20px;
+              font-size: 12px;
+              font-weight: 600;
+              margin-bottom: 16px;
+            }
+            h1 {
+              font-size: 28px;
+              line-height: 1.3;
+              margin-bottom: 16px;
+            }
+            .meta {
+              color: ${state.bgColor === 'dark' ? '#9ca3af' : '#6b7280'};
+              font-size: 14px;
+              margin-bottom: 24px;
+              display: flex;
+              gap: 16px;
+            }
+            .cover { 
+              width: 100%; 
+              border-radius: 12px; 
+              margin-bottom: 24px;
+            }
+            .content {
+              font-size: 16px;
+            }
+            .content h2 { font-size: 22px; margin: 24px 0 12px; }
+            .content h3 { font-size: 18px; margin: 20px 0 10px; }
+            .content p { margin: 16px 0; }
+            .content ul, .content ol { padding-left: 24px; margin: 16px 0; }
+            .content li { margin: 8px 0; }
+            .content blockquote {
+              border-left: 4px solid ${accentColor};
+              padding-left: 16px;
+              margin: 16px 0;
+              font-style: italic;
+              color: ${state.bgColor === 'dark' ? '#9ca3af' : '#6b7280'};
+            }
+            .content a { color: ${accentColor}; }
+            .content img { max-width: 100%; border-radius: 8px; }
+            .content pre {
+              background: ${state.bgColor === 'dark' ? '#1f2937' : '#1f2937'};
+              color: #e5e5e5;
+              padding: 16px;
+              border-radius: 8px;
+              overflow-x: auto;
+              margin: 16px 0;
+            }
+            .video-embed {
+              position: relative;
+              padding-bottom: 56.25%;
+              margin: 16px 0;
+            }
+            .video-embed iframe {
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              border-radius: 8px;
+            }
+          </style>
+        </head>
+        <body>
+          <span class="category">${category}</span>
+          <h1>${title}</h1>
+          <div class="meta">
+            <span>By ${author}</span>
+            <span>${date ? new Date(date).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : 'Today'}</span>
+          </div>
+          ${thumbnail ? `<img class="cover" src="${thumbnail}" alt="${title}">` : ''}
+          <div class="content">${content || '<p style="color:#9ca3af;">Your content will appear here...</p>'}</div>
+        </body>
+        </html>
+      `;
+
+            previewFrame.srcdoc = html;
+        }
+
+        function updateThumbnailPreview() {
+            const url = document.getElementById('thumbnailUrl').value;
+            const preview = document.getElementById('thumbnailPreview');
+            if (url) {
+                preview.style.display = 'block';
+                preview.querySelector('img').src = url;
+            } else {
+                preview.style.display = 'none';
+            }
+            updatePreview();
+        }
+
+        // Save/Load draft
+        function saveDraft() {
+            const data = collectArticleData();
+            localStorage.setItem('blogi_draft', JSON.stringify(data));
+            state.lastSaved = new Date();
+            state.isDirty = false;
+            updateSaveStatus();
+            showNotification('Draft saved!');
+        }
+
+        function loadDraft() {
+            const draft = localStorage.getItem('blogi_draft');
+            if (draft) {
+                const data = JSON.parse(draft);
+                document.getElementById('articleTitle').value = data.title || '';
+                document.getElementById('articleSlug').value = data.slug || '';
+                document.getElementById('contentEditor').innerHTML = data.content || '';
+                document.getElementById('articleCategory').value = data.category || '';
+                document.getElementById('articleAuthor').value = data.author || 'Editorial Team';
+                document.getElementById('articleTags').value = (data.tags || []).join(', ');
+                document.getElementById('articleDate').value = data.publishDate || new Date().toISOString().split('T')[0];
+                document.getElementById('articleExcerpt').value = data.excerpt || '';
+                document.getElementById('featuredScore').value = data.featuredScore || 50;
+                document.getElementById('scoreValue').textContent = data.featuredScore || 50;
+                document.getElementById('thumbnailUrl').value = data.thumbnail || '';
+                document.getElementById('youtubeUrl').value = data.youtubeUrl || '';
+                document.getElementById('fontStyle').value = data.fontStyle || 'system';
+
+                // Restore colors
+                if (data.bgColor) {
+                    state.bgColor = data.bgColor;
+                    document.querySelectorAll('#bgPalette .color-option').forEach(o => {
+                        o.classList.toggle('selected', o.dataset.color === data.bgColor);
+                    });
+                }
+                if (data.accentColor) {
+                    state.accentColor = data.accentColor;
+                    document.querySelectorAll('#accentPalette .color-option').forEach(o => {
+                        o.classList.toggle('selected', o.dataset.color === data.accentColor);
+                    });
+                }
+
+                updateThumbnailPreview();
+            }
+        }
+
+        function autoSave() {
+            if (state.isDirty) {
+                saveDraft();
+            }
+        }
+
+        function markDirty() {
+            state.isDirty = true;
+            updateSaveStatus();
+        }
+
+        function updateSaveStatus() {
+            const status = document.getElementById('saveStatus');
+            if (state.isDirty) {
+                status.textContent = 'Unsaved changes';
+                status.style.color = '#f59e0b';
+            } else if (state.lastSaved) {
+                status.textContent = 'All changes saved';
+                status.style.color = '#10b981';
+            }
+        }
+
+        function collectArticleData() {
+            return {
+                title: document.getElementById('articleTitle').value,
+                slug: document.getElementById('articleSlug').value,
+                content: document.getElementById('contentEditor').innerHTML,
+                category: document.getElementById('articleCategory').value,
+                author: document.getElementById('articleAuthor').value,
+                tags: document.getElementById('articleTags').value.split(',').map(t => t.trim()).filter(Boolean),
+                publishDate: document.getElementById('articleDate').value,
+                excerpt: document.getElementById('articleExcerpt').value,
+                featuredScore: parseInt(document.getElementById('featuredScore').value),
+                thumbnail: document.getElementById('thumbnailUrl').value,
+                youtubeUrl: document.getElementById('youtubeUrl').value,
+                bgColor: state.bgColor,
+                accentColor: state.accentColor,
+                fontStyle: document.getElementById('fontStyle').value
+            };
+        }
+
+        // Publishing
+        function showPublishModal() {
+            document.getElementById('publishModal').classList.add('active');
+            document.getElementById('publishConfirm').style.display = 'block';
+            document.getElementById('publishSuccess').style.display = 'none';
+            document.getElementById('publishError').style.display = 'none';
+
+            // Always show GitHub publish button since credentials are hardcoded
+            document.querySelector('#publishConfirm .btn-primary').innerHTML = `
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
+                Publish Now
+            `;
+        }
+
+        function closePublishModal() {
+            document.getElementById('publishModal').classList.remove('active');
+        }
+
+        async function publishArticle() {
+            const article = collectArticleData();
+
+            // Validation
+            if (!article.title) {
+                alert('Please enter a title');
+                return;
+            }
+            if (!article.category) {
+                alert('Please select a category');
+                return;
+            }
+            if (!article.content || article.content.trim() === '' || article.content === '<br>') {
+                alert('Please write some content');
+                return;
+            }
+
+            // Generate slug if empty
+            if (!article.slug) {
+                article.slug = article.title
+                    .toLowerCase()
+                    .trim()
+                    .replace(/[^\w\s-]/g, '')
+                    .replace(/[\s_-]+/g, '-')
+                    .replace(/^-+|-+$/g, '');
+            }
+
+            // Generate markdown content
+            const markdown = generateMarkdown(article);
+
+            // Call secure API to publish
+            try {
+                const response = await fetch(CONFIG.publishApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        password: CONFIG.password,
+                        slug: article.slug,
+                        title: article.title,
+                        markdown: markdown
+                    })
+                });
+
+                const result = await response.json();
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'Publishing failed');
+                }
+
+                // Success!
+                document.getElementById('publishConfirm').style.display = 'none';
+                document.getElementById('publishSuccess').style.display = 'block';
+                document.getElementById('articleUrl').innerHTML = `
+                    <strong>🎉 Published Successfully!</strong><br><br>
+                    <span style="font-size:13px;color:#6b7280;">
+                        Your article is being deployed.<br>
+                        It will be live in ~1-2 minutes.
+                    </span>
+                `;
+                document.getElementById('viewArticleBtn').href = `/articles/${article.slug}.html`;
+                document.getElementById('viewArticleBtn').style.display = 'inline-flex';
+
+                localStorage.removeItem('blogi_draft');
+
+            } catch (error) {
+                console.error('Publish error:', error);
+                document.getElementById('publishConfirm').style.display = 'none';
+                document.getElementById('publishError').style.display = 'block';
+                document.getElementById('errorMessage').textContent = error.message;
+            }
+        }
+
+        function generateMarkdown(article) {
+            const tags = (article.tags || []).map(t => `"${t}"`).join(', ');
+            const content = htmlToMarkdown(article.content);
+
+            return `---
+title: "${article.title}"
+slug: "${article.slug}"
+author: "${article.author || 'Editorial Team'}"
+category: "${article.category}"
+tags: [${tags}]
+publish_date: "${article.publishDate}"
+featured_score: ${article.featuredScore || 50}
+background_color: "${article.bgColor || 'white'}"
+page_accent: "${article.accentColor || 'blue'}"
+font_style: "${article.fontStyle || 'system'}"
+thumbnail: "${article.thumbnail || ''}"
+excerpt: "${article.excerpt || ''}"
+youtube_url: "${article.youtubeUrl || ''}"
+---
+
+${content}`;
+        }
+
+        function htmlToMarkdown(html) {
+            if (!html) return '';
+
+            return html
+                .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n\n')
+                .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n\n')
+                .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n\n')
+                .replace(/<strong>(.*?)<\/strong>/gi, '**$1**')
+                .replace(/<b>(.*?)<\/b>/gi, '**$1**')
+                .replace(/<em>(.*?)<\/em>/gi, '*$1*')
+                .replace(/<i>(.*?)<\/i>/gi, '*$1*')
+                .replace(/<u>(.*?)<\/u>/gi, '$1')
+                .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, '> $1\n\n')
+                .replace(/<li>(.*?)<\/li>/gi, '- $1\n')
+                .replace(/<ul[^>]*>|<\/ul>/gi, '\n')
+                .replace(/<ol[^>]*>|<\/ol>/gi, '\n')
+                .replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+                .replace(/<img[^>]*src="([^"]*)"[^>]*alt="([^"]*)"[^>]*\/?>/gi, '![$2]($1)')
+                .replace(/<img[^>]*src="([^"]*)"[^>]*\/?>/gi, '![]($1)')
+                .replace(/<br\s*\/?>/gi, '\n')
+                .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n\n')
+                .replace(/<pre[^>]*><code[^>]*>([\s\S]*?)<\/code><\/pre>/gi, '```\n$1\n```\n\n')
+                .replace(/<code>(.*?)<\/code>/gi, '`$1`')
+                .replace(/<div[^>]*class="video-embed"[^>]*>[\s\S]*?src="https:\/\/www\.youtube\.com\/embed\/([^"]*)"[\s\S]*?<\/div>/gi, '\n{{youtube:$1}}\n')
+                .replace(/<[^>]+>/g, '')
+                .replace(/&nbsp;/g, ' ')
+                .replace(/&amp;/g, '&')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
+                .replace(/\n{3,}/g, '\n\n')
+                .trim();
+        }
+
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#10b981;color:white;padding:12px 24px;border-radius:8px;font-weight:500;z-index:9999;animation:slideIn 0.3s ease;';
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+    </script>
 </body>
 
 </html>

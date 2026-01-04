@@ -4,515 +4,145 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- SEO Meta Tags - These will be replaced by build script -->
-    <meta name="description" content="A comprehensive guide to processing movie scripts efficiently with modern tools and proven techniques.">
-    <meta name="keywords" content="movies, workflow, screenwriting, tips">
-    <meta name="author" content="Editorial Team">
-
-    <!-- Open Graph -->
-    <meta property="og:type" content="article">
-    <meta property="og:url" content="https://blogi.com/articles/movie-script-processing.html">
-    <meta property="og:title" content="How to Process Movie Scripts Faster | Blogi">
-    <meta property="og:description" content="A comprehensive guide to processing movie scripts efficiently with modern tools and proven techniques.">
-    <meta property="og:image" content="/images/articles/movie-scripts.webp">
-    <meta property="article:published_time" content="2026-01-03">
-    <meta property="article:section" content="Movies">
-    <meta property="article:tag" content="{{tags}}">
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="How to Process Movie Scripts Faster | Blogi">
-    <meta name="twitter:description" content="A comprehensive guide to processing movie scripts efficiently with modern tools and proven techniques.">
-    <meta name="twitter:image" content="/images/articles/movie-scripts.webp">
-
-    <title>How to Process Movie Scripts Faster | Blogi</title>
-
-    <!-- Fonts -->
+    <meta name="description" content="A guide to processing movie scripts efficiently with modern tools.">
+    <title>How to Process Movie Scripts Faster | BLOGGINN</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Favicon -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="icon" type="image/png" href="/short log.png">
-
-    <!-- Styles -->
     <link rel="stylesheet" href="/css/main.css">
-
-    <!-- Article-specific styles injected from frontmatter -->
     <style>
         body {
-            font-family: 'Inter', var(--font-system);
+            font-family: 'Inter', -apple-system, sans-serif;
         }
 
-        :root {
-            --article-bg: {
-                    {
-                    background_color
-                }
-            }
-
-            ;
-
-            --article-accent: {
-                    {
-                    page_accent
-                }
-            }
-
-            ;
-
-            --article-font: {
-                    {
-                    font_style
-                }
-            }
-
-            ;
+        .article-title,
+        .article-content {
+            font-family: 'Playfair Display', Georgia, serif;
         }
     </style>
-
-    <!-- Structured Data for SEO -->
-    <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    "headline": "How to Process Movie Scripts Faster",
-    "image": "/images/articles/movie-scripts.webp",
-    "author": {
-      "@type": "Person",
-      "name": "Editorial Team"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Blogi",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://blogi.com/short log.png"
-      }
-    },
-    "datePublished": "2026-01-03",
-    "dateModified": "2026-01-03",
-    "description": "A comprehensive guide to processing movie scripts efficiently with modern tools and proven techniques."
-  }
-  </script>
 </head>
 
 <body>
-    <!-- Header -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+    <aside class="sidebar-nav" id="sidebarNav">
+        <a href="/" class="sidebar-logo"><img src="/short log.png" alt="BLOGGINN"><span>BLOGGINN</span></a>
+        <nav class="sidebar-menu">
+            <a href="/" class="sidebar-link"><svg viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+                </svg>Home</a>
+            <a href="#" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                    stroke-width="2">
+                    <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+                    <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+                </svg>Library</a>
+        </nav>
+        <div class="sidebar-divider"></div>
+        <p class="sidebar-section-title">Categories</p>
+        <nav class="sidebar-menu">
+            <a href="/categories/technology.html" class="sidebar-link">Technology</a>
+            <a href="/categories/business.html" class="sidebar-link">Business</a>
+            <a href="/categories/lifestyle.html" class="sidebar-link">Lifestyle</a>
+            <a href="/categories/movies.html" class="sidebar-link active">Movies</a>
+            <a href="/categories/health.html" class="sidebar-link">Health</a>
+        </nav>
+    </aside>
     <header class="header">
-        <div class="container">
-            <div class="header-inner">
-                <a href="/" class="logo">
-                    <img src="/short log.png" alt="Blogi" height="40">
-                    <span class="logo-text">BLOGI</span>
-                </a>
-
-                <nav class="nav">
-                    <ul class="nav-links">
-                        <li><a href="/" class="nav-link">Home</a></li>
-                        <li><a href="/categories/technology.html" class="nav-link">Technology</a></li>
-                        <li><a href="/categories/business.html" class="nav-link">Business</a></li>
-                        <li><a href="/categories/lifestyle.html" class="nav-link">Lifestyle</a></li>
-                        <li><a href="/categories/movies.html" class="nav-link">Movies</a></li>
-                    </ul>
-
-                    <div class="nav-actions">
-                        <a href="/#newsletter" class="btn btn-gradient">Subscribe</a>
-                    </div>
-
-                    <button class="mobile-menu-btn" aria-label="Toggle menu">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
-                </nav>
+        <div class="header-inner">
+            <div class="header-left">
+                <button class="hamburger-btn" id="hamburgerBtn"
+                    aria-label="Open menu"><span></span><span></span><span></span></button>
+                <a href="/" class="logo"><img src="/short log.png" alt="BLOGGINN"><span
+                        class="logo-text">BLOGGINN</span></a>
+            </div>
+            <div class="search-bar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg><span>Search</span></div>
+            <div class="header-actions">
+                <a href="/write.html" class="write-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2">
+                        <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path>
+                        <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                    </svg><span>Write</span></a>
+                <button class="notification-btn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2">
+                        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+                    </svg></button>
+                <button class="profile-btn">B</button>
             </div>
         </div>
     </header>
-
-    <!-- Article Header -->
     <section class="article-header">
-        <div class="container">
-            <a href="/categories/movies.html" class="article-category">Movies</a>
-            <h1 class="article-title">How to Process Movie Scripts Faster</h1>
-            <div class="article-meta">
-                <div class="article-meta-item">
-                    <img src="/images/authors/editorial-team.svg" alt="Editorial Team" class="article-author-avatar">
-                    <span>Editorial Team</span>
-                </div>
-                <div class="article-meta-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect>
-                        <line x1="16" y1="2" x2="16" y2="6"></line>
-                        <line x1="8" y1="2" x2="8" y2="6"></line>
-                        <line x1="3" y1="10" x2="21" y2="10"></line>
-                    </svg>
-                    <span>Jan 3, 2026</span>
-                </div>
-                <div class="article-meta-item">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"></circle>
-                        <polyline points="12 6 12 12 16 14"></polyline>
-                    </svg>
-                    <span>4 min read</span>
-                </div>
+        <h1 class="article-title">How to Process Movie Scripts Faster</h1>
+        <p class="article-subtitle">A comprehensive guide to processing movie scripts efficiently with modern tools and
+            proven techniques.</p>
+        <div class="article-author-bar">
+            <div class="article-author-info">
+                <div class="article-author-avatar"
+                    style="width:44px;height:44px;border-radius:50%;background:var(--color-accent);display:flex;align-items:center;justify-content:center;color:white;font-weight:600;">
+                    ET</div>
+                <div><span class="article-author-name">Editorial Team</span><a href="#"
+                        class="article-author-follow">Follow</a></div>
             </div>
+            <div class="article-reading-info"><span>Jan 3, 2026</span><span>·</span><span>4 min read</span></div>
         </div>
     </section>
-
-    <!-- Article Cover Image -->
-    <div class="article-cover">
-        <img src="/images/articles/movie-scripts.webp" alt="How to Process Movie Scripts Faster" loading="lazy">
+    <div class="article-cover"><img src="/images/articles/movie-scripts.webp" alt="Movie Scripts"
+            style="width:100%;max-width:1200px;height:auto;aspect-ratio:1200/490;object-fit:cover;margin:0 auto;display:block;">
     </div>
-
-    <!-- Article Content -->
     <article class="article-content">
-        <p><br><h2>Introduction</h2></p>
-<p>Whether you're a producer reviewing submissions, a development executive evaluating projects, or a reader working through a stack of scripts, the ability to efficiently process screenplays is an invaluable skill.</p>
-<p>The average screenplay is 90-120 pages long. When you're dealing with dozens—or even hundreds—of scripts, you need a systematic approach to evaluate them quickly without missing quality material.</p>
-<h2>The Pre-Read Phase</h2>
-<h3>Organizing Your Script Queue</h3>
-<p>Before diving into reading, set up a system:</p>
-<p><li><strong>Categorize by priority</strong>: Requested material, agent submissions, and unsolicited scripts</li><br><li><strong>Track deadlines</strong>: Some scripts need immediate attention</li><br><li><strong>Note context</strong>: Who submitted it, any recommendations, genre considerations</li><br><li><strong>Create a tracking spreadsheet</strong>: Title, source, date received, status</li></p>
-<h3>The 10-Page Test</h3>
-<p>Industry professionals often use the "10-page rule"—if a script hasn't grabbed you in the first 10 pages, it likely won't improve. During these pages, look for:</p>
-<ul><li>A compelling opening image or scene</li>
-<li>Clear establishment of tone and genre</li>
-<li>An intriguing protagonist or situation</li>
-<li>Professional formatting and clean prose</li>
-<li>A voice that feels fresh and confident</li>
-</ul>
-<h2>Speed Reading Techniques</h2>
-<h3>Skimming vs. Deep Reading</h3>
-<p>Not every script deserves a full, careful read on the first pass. Learn to:</p>
-<ul><li>Skim action lines while focusing on dialogue</li>
-<li>Jump to major structural points (inciting incident, midpoint, climax)</li>
-<li>Read sample scenes from different parts of the script</li>
-<li>Note pacing through page density (more white space = faster read)</li>
-</ul>
-<h3>What to Focus On</h3>
-<p>When speed reading, prioritize:</p>
-<ul><li><strong>Character introductions</strong>: How are main characters described?</li>
-<li><strong>Dialogue quality</strong>: Does it feel authentic and distinctive?</li>
-<li><strong>Structure</strong>: Does the script hit its beats at the right times?</li>
-<li><strong>Conflict escalation</strong>: Does each act raise the stakes?</li>
-</ul>
-<h2>Using Technology</h2>
-<h3>Script Analysis Software</h3>
-<p>Modern tools can help you process scripts faster:</p>
-<ul><li><strong>Final Draft and WriterSolo</strong>: For professional formatting review</li>
-<li><strong>Script coverage software</strong>: Automated initial analysis</li>
-<li><strong>Read-aloud tools</strong>: Listen to scripts while doing other tasks</li>
-<li><strong>Highlighting and annotation tools</strong>: Digital markup for notes</li>
-</ul>
-<h3>Creating Templates</h3>
-<p>Develop coverage templates that you can fill out quickly:</p>
-<pre><code class="language-">SCRIPT COVERAGE TEMPLATE
-========================
-Title:
-Writer:
-Genre:
-Pages:
-Date Read:
-<p>LOGLINE: (One sentence summary)</p>
-<p>SYNOPSIS: (Half page max)</p>
-<p>STRENGTHS:<br>-<br>-<br>-</p>
-<p>WEAKNESSES:<br>-<br>-<br>-</p>
-<p>COMPARABLE TITLES:</p>
-<p>RECOMMENDATION: [ ] PASS [ ] CONSIDER [ ] RECOMMEND</code></pre></p>
-<h2>Evaluation Frameworks</h2>
-<h3>The Story Spine</h3>
-<p>Quickly evaluate narrative structure using the "story spine":</p>
-<blockquote>Once upon a time...</blockquote>
-<blockquote>Every day...</blockquote>
-<blockquote>But one day...</blockquote>
-<blockquote>Because of that...</blockquote>
-<blockquote>Because of that...</blockquote>
-<blockquote>Until finally...</blockquote>
-<blockquote>And ever since then...</blockquote>
-<p>Can you fill this in after reading? If not, the structure may be unclear.</p>
-<h3>Character Checklist</h3>
-<p>For each main character, ask:</p>
-<ul><li>Do they have a clear goal?</li>
-<li>What's at stake if they fail?</li>
-<li>What's their flaw or wound?</li>
-<li>Do they change by the end?</li>
-<li>Are they active or passive in pursuing their goal?</li>
-</ul>
-<h2>Common Red Flags</h2>
-<p>Learn to spot issues quickly:</p>
-<ul><li><strong>Page one problems</strong>: Camera directions, excessive description, "we see" language</li>
-<li><strong>Dialogue issues</strong>: On-the-nose exposition, all characters sound the same</li>
-<li><strong>Structural problems</strong>: Inciting incident after page 25, saggy second act</li>
-<li><strong>Concept issues</strong>: Unclear genre, derivative premise, unmarketable idea</li>
-<li><strong>Formatting errors</strong>: Incorrect margins, missing scene headings, wrong font</li>
-</ul>
-<h2>Building Your Reading Muscle</h2>
-<h3>Practice and Calibration</h3>
-<p>The more scripts you read, the faster you get. Aim to:</p>
-<ul><li>Read at least 5-10 scripts per week</li>
-<li>Compare your coverage to professional coverage when available</li>
-<li>Discuss scripts with other readers to calibrate your taste</li>
-<li>Track which scripts you recommended that got made</li>
-</ul>
-<h3>Taking Care of Yourself</h3>
-<p>Script reading is mentally demanding. To stay sharp:</p>
-<ul><li>Take regular breaks</li>
-<li>Read in your peak productivity hours</li>
-<li>Vary your reading environment</li>
-<li>Balance script reading with pleasure reading</li>
-</ul>
-<h2>Conclusion</h2>
-<p>Processing scripts efficiently is a skill that develops over time. By combining systematic organization, strategic reading techniques, and the right tools, you can evaluate more material without sacrificing quality.</p>
-<p>Remember: the goal isn't just to read faster—it's to find the great scripts that deserve to be made.</p>
-<div class="video-container">
-      <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-              title="YouTube video" 
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-              allowfullscreen></iframe>
-    </div>
-<p><em>Check out our video above for more tips on script processing!</em></p>
-<hr>
-<p><em>What techniques do you use for reading scripts? Share your methods in the comments.</em><br></p>
+        <h2>Introduction</h2>
+        <p>Processing movie scripts efficiently is essential for producers, directors, and screenwriters. Modern tools
+            and techniques can dramatically reduce the time needed to analyze, annotate, and prepare scripts for
+            production.</p>
+        <h2>Script Analysis Tools</h2>
+        <p>Today's best script processing tools offer:</p>
+        <ul>
+            <li>Automatic scene breakdown</li>
+            <li>Character identification and tracking</li>
+            <li>Location and prop extraction</li>
+            <li>Scheduling integration</li>
+        </ul>
+        <h2>Workflow Optimization</h2>
+        <p>Key strategies for faster processing:</p>
+        <ul>
+            <li>Use standardized script formats</li>
+            <li>Implement batch processing</li>
+            <li>Leverage AI for initial analysis</li>
+            <li>Create reusable templates</li>
+        </ul>
+        <h2>Best Practices</h2>
+        <ul>
+            <li>Start with a clean, properly formatted script</li>
+            <li>Use color-coded annotations</li>
+            <li>Collaborate in real-time with cloud tools</li>
+            <li>Automate repetitive tasks</li>
+        </ul>
+        <h2>Conclusion</h2>
+        <p>With the right tools and workflows, script processing time can be reduced by 50% or more, letting creative
+            teams focus on what matters most—bringing stories to life.</p>
     </article>
-
-    <!-- Article Footer -->
-    <div class="article-footer">
-        <!-- Tags -->
-        <div class="article-tags">
-            <a href="/tags/movies.html" class="article-tag">#movies</a>
-      <a href="/tags/workflow.html" class="article-tag">#workflow</a>
-      <a href="/tags/screenwriting.html" class="article-tag">#screenwriting</a>
-      <a href="/tags/tips.html" class="article-tag">#tips</a>
-        </div>
-
-        <!-- Disclaimer -->
-        <div class="article-disclaimer">
-            <strong>Disclaimer:</strong> The views and opinions expressed in this article are those of the authors and
-            do not necessarily reflect the official policy or position of Blogi. The information provided is for general
-            informational purposes only and should not be taken as professional advice.
+    <div style="max-width:680px;margin:0 auto;padding:0 24px 40px;">
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:32px;">
+            <a href="/tags/movies.html" class="topic-pill">#movies</a>
+            <a href="/tags/scripts.html" class="topic-pill">#scripts</a>
+            <a href="/tags/productivity.html" class="topic-pill">#productivity</a>
         </div>
     </div>
-
-    <!-- Related Articles -->
-    <section class="related-articles">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Related Articles</h2>
-                <p class="section-subtitle">More articles you might enjoy</p>
-            </div>
-
-            <div class="blog-grid">
-                
-        <div class="blog-card">
-          <div class="blog-card-image">
-            <img src="/images/articles/tech-future.webp" alt="The Future of AI in Content Creation" loading="lazy">
-            <span class="blog-card-category">Technology</span>
-          </div>
-          <div class="blog-card-body">
-            <h3 class="blog-card-title">
-              <a href="/articles/future-of-ai-content-creation.html">The Future of AI in Content Creation</a>
-            </h3>
-            <p class="blog-card-excerpt">Exploring how artificial intelligence is revolutionizing the way we create and consume digital content in the modern era.</p>
-            <div class="blog-card-meta">
-              <div class="blog-card-author">
-                <span>Editorial Team</span>
-              </div>
-              <div class="blog-card-date">Jan 2, 2026</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="blog-card">
-          <div class="blog-card-image">
-            <img src="/images/articles/business-growth.webp" alt="Scaling Your Business in 2026: A Complete Guide" loading="lazy">
-            <span class="blog-card-category">Business</span>
-          </div>
-          <div class="blog-card-body">
-            <h3 class="blog-card-title">
-              <a href="/articles/scaling-business-2026.html">Scaling Your Business in 2026: A Complete Guide</a>
-            </h3>
-            <p class="blog-card-excerpt">Learn the proven strategies and frameworks that successful entrepreneurs use to scale their businesses effectively.</p>
-            <div class="blog-card-meta">
-              <div class="blog-card-author">
-                <span>Business Desk</span>
-              </div>
-              <div class="blog-card-date">Jan 1, 2026</div>
-            </div>
-          </div>
-        </div>
-
-        <div class="blog-card">
-          <div class="blog-card-image">
-            <img src="/images/articles/lifestyle-wellness.webp" alt="Mindful Living in the Digital Age" loading="lazy">
-            <span class="blog-card-category">Lifestyle</span>
-          </div>
-          <div class="blog-card-body">
-            <h3 class="blog-card-title">
-              <a href="/articles/mindful-living-digital-age.html">Mindful Living in the Digital Age</a>
-            </h3>
-            <p class="blog-card-excerpt">Discover practical tips for maintaining balance and wellness while staying connected in our increasingly digital world.</p>
-            <div class="blog-card-meta">
-              <div class="blog-card-author">
-                <span>Wellness Desk</span>
-              </div>
-              <div class="blog-card-date">Dec 30, 2025</div>
-            </div>
-          </div>
-        </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Newsletter CTA -->
-    <section class="section" id="newsletter">
-        <div class="container">
-            <div class="newsletter-cta">
-                <div class="newsletter-content">
-                    <h3>Enjoyed this article?</h3>
-                    <p>Subscribe to our newsletter and never miss an update from our editorial team.</p>
-                    <form class="newsletter-form" id="newsletterForm">
-                        <input type="email" placeholder="Enter your email address" required>
-                        <button type="submit">Subscribe</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <div class="footer-grid">
-                <div class="footer-brand">
-                    <a href="/" class="logo">
-                        <img src="/short log.png" alt="Blogi" height="32">
-                        <span class="logo-text">BLOGI</span>
-                    </a>
-                    <p>Your trusted source for insightful articles on technology, business, lifestyle, and more. Quality
-                        content delivered weekly.</p>
-                    <div class="footer-social">
-                        <a href="#" aria-label="Twitter">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" />
-                            </svg>
-                        </a>
-                        <a href="#" aria-label="LinkedIn">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
-                                <rect x="2" y="9" width="4" height="12" />
-                                <circle cx="4" cy="4" r="2" />
-                            </svg>
-                        </a>
-                        <a href="#" aria-label="GitHub">
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                                <path
-                                    d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-                <div class="footer-column">
-                    <h4>Categories</h4>
-                    <ul>
-                        <li><a href="/categories/technology.html">Technology</a></li>
-                        <li><a href="/categories/business.html">Business</a></li>
-                        <li><a href="/categories/lifestyle.html">Lifestyle</a></li>
-                        <li><a href="/categories/movies.html">Movies</a></li>
-                        <li><a href="/categories/health.html">Health</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h4>Support</h4>
-                    <ul>
-                        <li><a href="#">Documentation</a></li>
-                        <li><a href="#">Tutorials</a></li>
-                        <li><a href="#">FAQs</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h4>Legal</h4>
-                    <ul>
-                        <li><a href="#">Terms of Use</a></li>
-                        <li><a href="#">Privacy Policy</a></li>
-                        <li><a href="#">Cookie Policy</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-column">
-                    <h4>Company</h4>
-                    <ul>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Blog</a></li>
-                        <li><a href="#">Careers</a></li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2026 Blogi. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#">Privacy</a>
-                    <a href="#">Terms</a>
-                    <a href="/sitemap.xml">Sitemap</a>
-                </div>
-            </div>
+        <div class="footer-container">
+            <p class="footer-copyright">© 2026 BLOGGINN</p>
         </div>
     </footer>
-
-    <!-- Minimal JavaScript -->
     <script>
-        // Mobile menu toggle
-        const mobileMenuBtn = document.querySelector('.mobile-menu-btn');
-        const navLinks = document.querySelector('.nav-links');
-
-        if (mobileMenuBtn) {
-            mobileMenuBtn.addEventListener('click', () => {
-                navLinks.classList.toggle('active');
-            });
-        }
-
-        // Newsletter form
-        const newsletterForm = document.getElementById('newsletterForm');
-        if (newsletterForm) {
-            newsletterForm.addEventListener('submit', (e) => {
-                e.preventDefault();
-                const email = e.target.querySelector('input').value;
-                alert('Thank you for subscribing! You will receive updates at: ' + email);
-                e.target.reset();
-            });
-        }
-
-        // Lazy load images
-        document.addEventListener('DOMContentLoaded', () => {
-            const images = document.querySelectorAll('img[loading="lazy"]');
-            images.forEach(img => {
-                img.addEventListener('load', () => {
-                    img.classList.add('loaded');
-                });
-                if (img.complete) {
-                    img.classList.add('loaded');
-                }
-            });
-        });
-
-        // Reading progress indicator
-        const progressBar = document.createElement('div');
-        progressBar.style.cssText = 'position:fixed;top:0;left:0;height:3px;background:var(--color-primary);z-index:9999;transition:width 0.1s;';
-        document.body.appendChild(progressBar);
-
-        window.addEventListener('scroll', () => {
-            const scrollTop = window.scrollY;
-            const docHeight = document.documentElement.scrollHeight - window.innerHeight;
-            const scrollPercent = (scrollTop / docHeight) * 100;
-            progressBar.style.width = scrollPercent + '%';
-        });
+        const hamburgerBtn = document.getElementById('hamburgerBtn'), sidebarNav = document.getElementById('sidebarNav'), sidebarOverlay = document.getElementById('sidebarOverlay');
+        function openSidebar() { sidebarNav.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+        function closeSidebar() { sidebarNav.classList.remove('active'); sidebarOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+        hamburgerBtn.addEventListener('click', openSidebar); sidebarOverlay.addEventListener('click', closeSidebar);
+        document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
     </script>
 </body>
 

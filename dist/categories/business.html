@@ -1,39 +1,123 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Insights on entrepreneurship, management, finance, and business growth strategies.">
-  <meta property="og:title" content="Business Articles | Blogi">
-  <meta property="og:description" content="Insights on entrepreneurship, management, finance, and business growth strategies.">
-  <title>Business Articles | Blogi</title>
+  <meta name="description"
+    content="Expert insights on entrepreneurship, startups, finance, and business growth strategies.">
+  <meta property="og:title" content="Business Articles | BLOGGINN">
+  <meta property="og:description"
+    content="Expert insights on entrepreneurship, startups, finance, and business growth strategies.">
+  <title>Business Articles | BLOGGINN</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+
   <link rel="icon" type="image/png" href="/short log.png">
   <link rel="stylesheet" href="/css/main.css">
-  <style>body { font-family: 'Inter', var(--font-system); }</style>
+  <style>
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    .category-header h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+  </style>
 </head>
+
 <body>
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <aside class="sidebar-nav" id="sidebarNav">
+    <a href="/" class="sidebar-logo">
+      <img src="/short log.png" alt="BLOGGINN"><span>BLOGGINN</span>
+    </a>
+    <nav class="sidebar-menu">
+      <a href="/" class="sidebar-link"><svg viewBox="0 0 24 24" fill="currentColor">
+          <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path>
+        </svg>Home</a>
+      <a href="#" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 016.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"></path>
+        </svg>Library</a>
+      <a href="#" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="8" r="5"></circle>
+          <path d="M20 21a8 8 0 00-16 0"></path>
+        </svg>Profile</a>
+      <a href="#" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
+          <line x1="9" y1="9" x2="15" y2="9"></line>
+          <line x1="9" y1="13" x2="15" y2="13"></line>
+          <line x1="9" y1="17" x2="13" y2="17"></line>
+        </svg>Stories</a>
+      <a href="#" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" y1="20" x2="18" y2="10"></line>
+          <line x1="12" y1="20" x2="12" y2="4"></line>
+          <line x1="6" y1="20" x2="6" y2="14"></line>
+        </svg>Stats</a>
+    </nav>
+    <div class="sidebar-divider"></div>
+    <p class="sidebar-section-title">Categories</p>
+    <nav class="sidebar-menu">
+      <a href="/categories/technology.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+          <line x1="8" y1="21" x2="16" y2="21"></line>
+          <line x1="12" y1="17" x2="12" y2="21"></line>
+        </svg>Technology</a>
+      <a href="/categories/business.html" class="sidebar-link active"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <line x1="12" y1="1" x2="12" y2="23"></line>
+          <path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"></path>
+        </svg>Business</a>
+      <a href="/categories/lifestyle.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none"
+          stroke="currentColor" stroke-width="2">
+          <path
+            d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z">
+          </path>
+        </svg>Lifestyle</a>
+      <a href="/categories/movies.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"></rect>
+          <line x1="7" y1="2" x2="7" y2="22"></line>
+          <line x1="17" y1="2" x2="17" y2="22"></line>
+          <line x1="2" y1="12" x2="22" y2="12"></line>
+        </svg>Movies</a>
+      <a href="/categories/health.html" class="sidebar-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+          stroke-width="2">
+          <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+        </svg>Health</a>
+    </nav>
+  </aside>
+
   <header class="header">
-    <div class="container">
-      <div class="header-inner">
-        <a href="/" class="logo">
-          <img src="/short log.png" alt="Blogi" height="40">
-          <span class="logo-text">BLOGI</span>
-        </a>
-        <nav class="nav">
-          <ul class="nav-links">
-            <li><a href="/" class="nav-link">Home</a></li>
-            <li><a href="/categories/technology.html" class="nav-link ">Technology</a></li>
-            <li><a href="/categories/business.html" class="nav-link active">Business</a></li>
-            <li><a href="/categories/lifestyle.html" class="nav-link ">Lifestyle</a></li>
-            <li><a href="/categories/movies.html" class="nav-link ">Movies</a></li>
-          </ul>
-          <div class="nav-actions">
-            <a href="/#newsletter" class="btn btn-gradient">Subscribe</a>
-          </div>
-        </nav>
+    <div class="header-inner">
+      <div class="header-left">
+        <button class="hamburger-btn" id="hamburgerBtn"
+          aria-label="Open menu"><span></span><span></span><span></span></button>
+        <a href="/" class="logo"><img src="/short log.png" alt="BLOGGINN"><span class="logo-text">BLOGGINN</span></a>
+      </div>
+      <div class="search-bar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"></circle>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+        </svg><span>Search</span></div>
+      <div class="header-actions">
+        <a href="/write.html" class="write-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor"
+            stroke-width="2">
+            <path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"></path>
+            <path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+          </svg><span>Write</span></a>
+        <button class="notification-btn" aria-label="Notifications"><svg viewBox="0 0 24 24" fill="none"
+            stroke="currentColor" stroke-width="2">
+            <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"></path>
+            <path d="M13.73 21a2 2 0 01-3.46 0"></path>
+          </svg></button>
+        <button class="profile-btn" aria-label="Profile">B</button>
       </div>
     </div>
   </header>
@@ -41,56 +125,70 @@
   <section class="category-header">
     <div class="container">
       <h1>Business</h1>
-      <p class="category-description">Insights on entrepreneurship, management, finance, and business growth strategies.</p>
+      <p class="category-description">Expert insights on entrepreneurship, startups, finance, and business growth
+        strategies.</p>
     </div>
   </section>
 
   <section class="section">
     <div class="container">
-      <div class="section-header">
-        <h2 class="section-title">All Business Articles</h2>
-        <p class="section-subtitle">1 articles in this category</p>
-      </div>
-      
       <div class="category-grid">
-        
-        <div class="blog-card">
-          <div class="blog-card-image">
-            <img src="/images/articles/business-growth.webp" alt="Scaling Your Business in 2026: A Complete Guide" loading="lazy">
-            <span class="blog-card-category">Business</span>
+        <article class="article-card"
+          style="display: flex; flex-direction: column; background: var(--color-surface); border-radius: 8px; overflow: hidden; border: 1px solid var(--color-border-light);">
+          <div style="height: 200px; overflow: hidden;">
+            <img src="/images/articles/scaling-business.webp" alt="Scaling Your Business in 2026"
+              style="width: 100%; height: 100%; object-fit: cover;">
           </div>
-          <div class="blog-card-body">
-            <h3 class="blog-card-title">
-              <a href="/articles/scaling-business-2026.html">Scaling Your Business in 2026: A Complete Guide</a>
+          <div style="padding: var(--spacing-5);">
+            <span class="topic-pill" style="margin-bottom: var(--spacing-3); display: inline-block;">Business</span>
+            <h3
+              style="font-family: var(--font-serif); font-size: var(--font-size-xl); font-weight: 700; margin-bottom: var(--spacing-2);">
+              <a href="/articles/scaling-business-2026.html">Scaling Your Business in 2026</a>
             </h3>
-            <p class="blog-card-excerpt">Learn the proven strategies and frameworks that successful entrepreneurs use to scale their businesses effectively.</p>
-            <div class="blog-card-meta">
-              <div class="blog-card-author">
-                <span>Business Desk</span>
-              </div>
-              <div class="blog-card-date">Jan 1, 2026</div>
+            <p
+              style="color: var(--color-text-secondary); font-size: var(--font-size-sm); margin-bottom: var(--spacing-4); line-height: 1.6;">
+              Strategic insights for entrepreneurs looking to take their ventures to the next level.</p>
+            <div
+              style="display: flex; align-items: center; gap: var(--spacing-2); font-size: var(--font-size-sm); color: var(--color-text-muted);">
+              <span>Editorial Team</span><span>·</span><span>Jan 1, 2026</span>
             </div>
           </div>
-        </div>
+        </article>
       </div>
     </div>
   </section>
 
-  <section class="section section-alt">
-    <div class="container container-narrow">
-      <h2 class="section-title text-center">About Business</h2>
-      <div style="margin-top: var(--spacing-6); line-height: var(--line-height-relaxed); color: var(--color-gray-600);">
-        <p>Whether you're launching a startup or scaling an enterprise, our business content delivers the strategies you need. From financial planning and team management to market analysis and growth hacking, we provide expert guidance for every stage of your business journey.</p>
-      </div>
+  <section class="section" style="background: var(--color-surface);">
+    <div class="container" style="max-width: 680px;">
+      <h2
+        style="font-family: var(--font-serif); font-size: var(--font-size-2xl); text-align: center; margin-bottom: var(--spacing-6);">
+        About Business</h2>
+      <p style="color: var(--color-text-secondary); line-height: 1.8; text-align: center;">From startup strategies to
+        corporate insights, our business articles provide valuable perspectives on building, growing, and scaling
+        successful ventures in today's competitive landscape.</p>
     </div>
   </section>
 
   <footer class="footer">
-    <div class="container">
-      <div class="footer-bottom">
-        <p>&copy; 2026 Blogi. All rights reserved.</p>
+    <div class="footer-container">
+      <div class="footer-links">
+        <a href="#" class="footer-link">Help</a><a href="#" class="footer-link">About</a><a href="#"
+          class="footer-link">Privacy</a><a href="#" class="footer-link">Terms</a>
       </div>
+      <p class="footer-copyright">&copy; 2026 BLOGGINN. All rights reserved.</p>
     </div>
   </footer>
+
+  <script>
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const sidebarNav = document.getElementById('sidebarNav');
+    const sidebarOverlay = document.getElementById('sidebarOverlay');
+    function openSidebar() { sidebarNav.classList.add('active'); sidebarOverlay.classList.add('active'); document.body.style.overflow = 'hidden'; }
+    function closeSidebar() { sidebarNav.classList.remove('active'); sidebarOverlay.classList.remove('active'); document.body.style.overflow = ''; }
+    hamburgerBtn.addEventListener('click', openSidebar);
+    sidebarOverlay.addEventListener('click', closeSidebar);
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeSidebar(); });
+  </script>
 </body>
+
 </html>
